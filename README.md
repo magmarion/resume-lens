@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Resume AI Reviewer
 
-## Getting Started
+An AI powered resume analysis platform designed to help job seekers create stronger, more competitive resumes through instant, personalized feedback.
 
-First, run the development server:
+Resume AI Reviewer analyzes your resume for clarity, structure, ATS compatibility, and overall effectiveness, providing actionable recommendations that help increase your chances of landing interviews.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+* 🤖 AI powered resume analysis
+* 📄 Secure PDF resume uploads
+* 📊 ATS compatibility assessment
+* 📝 Detailed section by section feedback
+* ✨ Actionable suggestions for improvement
+* 🎯 Personalized recommendations tailored to your resume
+* ⚡ Instant analysis and scoring
+* 📱 Responsive, modern user experience
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## How It Works
 
-To learn more about Next.js, take a look at the following resources:
+1. Upload your resume in PDF format.
+2. Our AI analyzes the content, formatting, and overall presentation.
+3. Receive a comprehensive review with scores, insights, and practical recommendations.
+4. Improve your resume based on the feedback before applying for your next opportunity.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Technology
 
-## Deploy on Vercel
+Resume AI Reviewer is built using modern web technologies to provide a fast, reliable, and seamless experience.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Frontend**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* framer motion
+
+**Backend**
+
+* Next.js Server Actions
+* AI powered resume analysis
+* Secure file processing
+
+---
+
+## Mission
+
+Finding a job is challenging enough without having to guess whether your resume is effective. Resume AI Reviewer aims to make professional resume feedback accessible to everyone by delivering fast, intelligent, and practical insights that help candidates present their experience with confidence.
+
+---
+
+## Contributing
+
+Contributions, feature suggestions, and bug reports are always welcome. If you have ideas for improving Resume AI Reviewer, feel free to open an issue or submit a pull request.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
