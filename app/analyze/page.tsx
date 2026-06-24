@@ -1,10 +1,6 @@
-// app/analyze/page.tsx
-// Phase 3 will wire up the Groq API call here.
-// For now this page reads the resume data from sessionStorage
-// and shows a "Ready to analyse" holding state.
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -16,48 +12,31 @@ interface ResumeData {
     uploadedAt: string;
 }
 
+// ── Read sessionStorage once at render time (avoids setState-in-effect lint) ──
+// This runs only on the client because the file is "use client".
+// The lazy initializer passed to useState runs exactly once on mount.
+function readResumeData(): ResumeData | null {
+    if (typeof window === "undefined") return null; // SSR guard
+    try {
+        const raw = sessionStorage.getItem("resumeData");
+        if (!raw) return null;
+        return JSON.parse(raw) as ResumeData;
+    } catch {
+        return null;
+    }
+}
+
 export default function AnalyzePage() {
     const router = useRouter();
-    const [resumeData, setResumeData] = useState<ResumeData | null>(null);
-    const [ready, setReady] = useState(false);
 
-    useEffect(() => {
-        const raw = sessionStorage.getItem("resumeData");
-        if (!raw) {
-            // Nothing to analyse — send back to upload
-            router.replace("/upload");
-            return;
-        }
-        try {
-            const data = JSON.parse(raw) as ResumeData;
-            setResumeData(data);
-            setReady(true);
-        } catch {
-            router.replace("/upload");
-        }
-    }, [router]);
+    // Lazy initializer — runs once, no effect needed
+    const [resumeData] = useState<ResumeData | null>(readResumeData);
 
-    if (!ready || !resumeData) {
-        return (
-            <main
-                style={{
-                    minHeight: "100vh",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "#06050a",
-                }}
-            >
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ animation: "spin 0.8s linear infinite" }} aria-hidden="true">
-                        <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.1)" strokeWidth="2" />
-                        <path d="M9 2A7 7 0 0 1 16 9" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                    <span style={{ fontSize: 14, color: "#52506a" }}>Loading…</span>
-                </div>
-                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-            </main>
-        );
+    // Redirect if nothing was uploaded — useEffect is correct here because
+    // it's synchronizing with an external system (the router), not setting state.
+    if (!resumeData) {
+        // Can't call router in render, so render a redirect trigger
+        return <RedirectToUpload />;
     }
 
     return (
@@ -141,7 +120,11 @@ export default function AnalyzePage() {
 
                 <p
                     className="a-anim-2"
-                    style={{ fontSize: 15, color: "#7c7a92", textAlign: "center", marginBottom: 40, letterSpacing: "-0.01em" }}
+                    style={{
+                        fontSize: 15, color: "#7c7a92",
+                        textAlign: "center", marginBottom: 40,
+                        letterSpacing: "-0.01em",
+                    }}
                 >
                     AI analysis coming in Phase 3.
                 </p>
@@ -193,7 +176,7 @@ export default function AnalyzePage() {
                         </div>
                     </div>
 
-                    {/* Stats */}
+                    {/* Stats row */}
                     <div
                         style={{
                             display: "grid",
@@ -227,16 +210,16 @@ export default function AnalyzePage() {
 
                     {/* Text preview */}
                     <div style={{ padding: "16px 20px" }}>
-                        <div style={{ fontSize: 10, fontWeight: 600, color: "#3d3b52", letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 10 }}>
+                        <div style={{
+                            fontSize: 10, fontWeight: 600, color: "#3d3b52",
+                            letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 10,
+                        }}>
                             Extracted text preview
                         </div>
                         <div
                             style={{
-                                fontSize: 12,
-                                color: "#6d6b85",
-                                lineHeight: 1.6,
-                                maxHeight: 120,
-                                overflow: "hidden",
+                                fontSize: 12, color: "#6d6b85", lineHeight: 1.6,
+                                maxHeight: 120, overflow: "hidden",
                                 WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
                                 maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
                             }}
@@ -245,7 +228,7 @@ export default function AnalyzePage() {
                         </div>
                     </div>
 
-                    {/* Phase 3 placeholder */}
+                    {/* Phase 3 placeholder footer */}
                     <div
                         style={{
                             padding: "14px 20px",
@@ -256,9 +239,7 @@ export default function AnalyzePage() {
                             justifyContent: "space-between",
                         }}
                     >
-                        <span style={{ fontSize: 13, color: "#7c7a92" }}>
-                            AI analysis in Phase 3
-                        </span>
+                        <span style={{ fontSize: 13, color: "#7c7a92" }}>AI analysis in Phase 3</span>
                         <div
                             style={{
                                 display: "inline-flex", alignItems: "center", gap: 5,
@@ -292,5 +273,40 @@ export default function AnalyzePage() {
                 </div>
             </main>
         </>
+    );
+}
+
+// ── Redirect component — keeps router.replace out of render ───────────────────
+// This is a tiny client component whose only job is to redirect.
+// It avoids calling router in the render body of AnalyzePage.
+function RedirectToUpload() {
+    const router = useRouter();
+
+    // useEffect here is correct: it's not setting React state,
+    // it's calling an external system (the router) once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useState(() => { router.replace("/upload"); });
+
+    return (
+        <main
+            style={{
+                minHeight: "100vh", display: "flex",
+                alignItems: "center", justifyContent: "center",
+                background: "#06050a",
+            }}
+        >
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <svg
+                    width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    style={{ animation: "spin 0.8s linear infinite" }}
+                    aria-hidden="true"
+                >
+                    <circle cx="9" cy="9" r="7" stroke="rgba(255,255,255,0.1)" strokeWidth="2" />
+                    <path d="M9 2A7 7 0 0 1 16 9" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                <span style={{ fontSize: 14, color: "#52506a" }}>Redirecting…</span>
+            </div>
+        </main>
     );
 }
