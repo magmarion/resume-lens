@@ -1,25 +1,27 @@
-// app/api/parse-pdf/route.ts
-// npm install pdfjs-dist
 import { NextRequest, NextResponse } from "next/server";
+import PDFParser from "pdf2json";
 
-const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
+const MAX_BYTES = 5 * 1024 * 1024;
 
-interface TextItem {
-    str: string;
+interface PDFTextItem {
+    R?: Array<{
+        T?: string;
+    }>;
 }
 
-interface TextMarkedContent {
-    type: string;
+interface PDFPage {
+    Texts?: PDFTextItem[];
 }
 
-type TextContentItem = TextItem | TextMarkedContent;
+interface PDFData {
+    Pages?: PDFPage[];
+}
 
 export async function POST(req: NextRequest) {
     try {
         const formData = await req.formData();
         const file = formData.get("file");
 
-        // ── Validation ─────────────────────────────────────────────────────────
         if (!file || !(file instanceof File)) {
             return NextResponse.json({ error: "No file provided." }, { status: 400 });
         }
@@ -30,71 +32,63 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "File exceeds the 5 MB limit." }, { status: 400 });
         }
 
-        // ── Parse with pdfjs-dist ───────────────────────────────────────────────
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const pdfjsLib = require("pdfjs-dist/legacy/build/pdf.cjs") as {
-            GlobalWorkerOptions: { workerSrc: string };
-            getDocument: (options: {
-                data: Uint8Array;
-                useWorkerFetch: boolean;
-                isEvalSupported: boolean;
-                useSystemFonts: boolean;
-            }) => {
-                promise: Promise<{
-                    numPages: number;
-                    getPage: (n: number) => Promise<{
-                        getTextContent: () => Promise<{ items: TextContentItem[] }>;
-                    }>;
-                }>;
-            };
-        };
+        const buffer = Buffer.from(await file.arrayBuffer());
 
-        // Disable the web worker — not available in Node API routes
-        pdfjsLib.GlobalWorkerOptions.workerSrc = "";
+        const pdfParser = new PDFParser();
 
-        const arrayBuffer = await file.arrayBuffer();
-        const loadingTask = pdfjsLib.getDocument({
-            data: new Uint8Array(arrayBuffer),
-            useWorkerFetch: false,
-            isEvalSupported: false,
-            useSystemFonts: true,
+        // Parse the PDF
+        const data = await new Promise<PDFData>((resolve, reject) => {
+            pdfParser.on('pdfParser_dataReady', (pdfData: PDFData) => {
+                resolve(pdfData);
+            });
+
+            pdfParser.on('pdfParser_dataError', (errMsg: Error | { parserError: Error }) => {
+                // Handle both error types
+                if (errMsg instanceof Error) {
+                    reject(errMsg);
+                } else {
+                    reject(errMsg.parserError || new Error('PDF parsing failed'));
+                }
+            });
+
+            pdfParser.parseBuffer(buffer);
         });
 
-        const pdf = await loadingTask.promise;
-        const pageCount = pdf.numPages;
+        // Extract text safely
+        const pages = data.Pages || [];
+        const pageCount = pages.length;
 
-        // Extract text page by page
-        const pageTexts: string[] = [];
-        for (let i = 1; i <= pageCount; i++) {
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            const pageText = content.items
-                .map((item) => ("str" in item ? item.str : ""))
-                .join(" ");
-            pageTexts.push(pageText);
+        let fullText = '';
+        for (const page of pages) {
+            const texts = page.Texts || [];
+            for (const textItem of texts) {
+                const rawText = textItem.R?.[0]?.T || '';
+                try {
+                    fullText += decodeURIComponent(rawText) + ' ';
+                } catch {
+                    fullText += rawText + ' ';
+                }
+            }
+            fullText += '\n';
         }
 
-        const text = pageTexts.join("\n").trim();
+        const text = fullText.trim();
+        const wordCount = text ? text.split(/\s+/).filter(Boolean).length : 0;
 
         if (!text || text.length < 50) {
-            return NextResponse.json(
-                {
-                    error:
-                        "Could not extract readable text from this PDF. It may be image-based or scanned — please use a text-based PDF.",
-                },
-                { status: 422 }
-            );
+            return NextResponse.json({
+                error: "No text could be extracted from this PDF. It may be a scanned image or encrypted file.",
+                text: "",
+                pageCount,
+                wordCount: 0,
+            }, { status: 422 });
         }
-
-        const wordCount = text.split(/\s+/).filter(Boolean).length;
 
         return NextResponse.json({ text, pageCount, wordCount });
 
     } catch (err) {
-        console.error("[parse-pdf]", err);
-        return NextResponse.json(
-            { error: "Failed to parse the PDF. Please try a different file." },
-            { status: 500 }
-        );
+        console.error("[parse-pdf] ERROR:", err);
+        const errorMessage = err instanceof Error ? err.message : "Failed to parse PDF";
+        return NextResponse.json({ error: errorMessage }, { status: 500 });
     }
 }
