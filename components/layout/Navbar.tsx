@@ -102,7 +102,7 @@ export default function Navbar() {
 
                     {/* "Try free" → upload page */}
                     <Link
-                        href="/upload"
+                        href=""
                         style={{
                             display: "inline-flex", alignItems: "center", gap: 6,
                             padding: "8px 16px", borderRadius: 9,

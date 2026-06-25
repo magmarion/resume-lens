@@ -165,10 +165,8 @@ export default function Hero() {
                 }
             `}</style>
 
-            {/* Canvas gradient BG */}
             <HeroBackground />
 
-            {/* Vignette */}
             <div
                 aria-hidden="true"
                 style={{
@@ -176,7 +174,7 @@ export default function Hero() {
                     inset: 0,
                     zIndex: 1,
                     pointerEvents: "none",
-                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06050a 72%)",
+                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06090a 72%)",
                 }}
             />
 

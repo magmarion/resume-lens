@@ -1,108 +1,50 @@
-// app/upload/page.tsx
 "use client";
 
 import Link from "next/link";
 import UploadBox from "@/components/upload/UploadBox";
-
-import { useEffect, useRef } from "react";
-
-interface Orb {
-    cx: number; cy: number; r: number; color: string;
-    sinFreq: number; cosFreq: number;
-    sinAmp: number; cosAmp: number;
-    alpha: number; alphaFade: number;
-}
-
-const ORBS: Orb[] = [
-    { cx: 0.15, cy: 0.20, r: 0.50, color: "99,73,228", sinFreq: 0.0004, cosFreq: 0.0003, sinAmp: 0.04, cosAmp: 0.05, alpha: 0.22, alphaFade: 0.05 },
-    { cx: 0.85, cy: 0.25, r: 0.45, color: "168,85,247", sinFreq: 0.0005, cosFreq: 0.0004, sinAmp: 0.04, cosAmp: 0.06, alpha: 0.15, alphaFade: 0.05 },
-    { cx: 0.50, cy: 0.80, r: 0.45, color: "29,78,216", sinFreq: 0.0003, cosFreq: 0.0005, sinAmp: 0.06, cosAmp: 0.04, alpha: 0.14, alphaFade: 0.04 },
-];
-
-function GradientCanvas() {
-    const ref = useRef<HTMLCanvasElement>(null);
-
-    useEffect(() => {
-        const canvas = ref.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
-        let animId = 0;
-        let t = 0;
-
-        function resize() {
-            if (!canvas || !ctx) return;
-            canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-            canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-        }
-        resize();
-        window.addEventListener("resize", resize);
-
-        function draw() {
-            if (!canvas || !ctx) return;
-            ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
-            ORBS.forEach(orb => {
-                if (!canvas || !ctx) return;
-                const w = canvas.offsetWidth;
-                const h = canvas.offsetHeight;
-                const ox = w * (orb.cx + Math.sin(t * orb.sinFreq) * orb.sinAmp);
-                const oy = h * (orb.cy + Math.cos(t * orb.cosFreq) * orb.cosAmp);
-                const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, w * orb.r);
-                g.addColorStop(0, `rgba(${orb.color},${orb.alpha})`);
-                g.addColorStop(0.5, `rgba(${orb.color},${orb.alphaFade})`);
-                g.addColorStop(1, "rgba(0,0,0,0)");
-                ctx.fillStyle = g;
-                ctx.fillRect(0, 0, w, h);
-            });
-            t++;
-            animId = requestAnimationFrame(draw);
-        }
-
-        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (reduced) { t = 200; draw(); cancelAnimationFrame(animId); animId = 0; }
-        else draw();
-
-        return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); };
-    }, []);
-
-    return (
-        <canvas
-            ref={ref}
-            aria-hidden="true"
-            style={{ position: "fixed", inset: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: 0 }}
-        />
-    );
-}
+import { HeroBackground } from "@/components/home/HeroBackground";
 
 export default function UploadPage() {
     return (
         <>
             <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(18px); }
-          to   { opacity: 1; transform: translateY(0);    }
-        }
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .u-anim { animation: none !important; opacity: 1 !important; }
-        }
-        .u-anim-1 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0ms   both; }
-        .u-anim-2 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 80ms  both; }
-        .u-anim-3 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 160ms both; }
-      `}</style>
+                body {
+                    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                    background: #06050a;
+                    color: #f1f0f5;
+                    overflow-x: hidden;
+                }
 
-            <GradientCanvas />
+                @keyframes fadeUp {
+                    from { opacity: 0; transform: translateY(22px); }
+                    to   { opacity: 1; transform: translateY(0);    }
+                }
 
-            {/* Vignette */}
+                @media (prefers-reduced-motion: reduce) {
+                    .u-anim-1, .u-anim-2, .u-anim-3 {
+                        animation: none !important;
+                        opacity: 1 !important;
+                        transform: none !important;
+                    }
+                }
+
+                .u-anim-1 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0ms   both; }
+                .u-anim-2 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 90ms  both; }
+                .u-anim-3 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 170ms both; }
+            `}</style>
+
+            {/* Same canvas orbs as Hero */}
+            <HeroBackground />
+
+            {/* Same vignette as Hero — identical values */}
             <div
                 aria-hidden="true"
                 style={{
-                    position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none",
-                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06050a 72%)",
+                    position: "fixed",
+                    inset: 0,
+                    zIndex: 1,
+                    pointerEvents: "none",
+                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06090a 72%)",
                 }}
             />
 
@@ -115,13 +57,13 @@ export default function UploadPage() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "80px 24px 60px",
+                    padding: "90px 24px 60px",
                 }}
             >
-                {/* Back link */}
+                {/* Back link — sits below the 58px fixed Navbar */}
                 <div
                     className="u-anim-1"
-                    style={{ position: "absolute", top: 24, left: 24 }}
+                    style={{ position: "absolute", top: 72, left: 32 }}
                 >
                     <Link
                         href="/"
@@ -134,6 +76,7 @@ export default function UploadPage() {
                             color: "#52506a",
                             textDecoration: "none",
                             transition: "color 0.15s ease",
+                            cursor: "pointer",
                         }}
                         onMouseEnter={e => (e.currentTarget.style.color = "#c4b5fd")}
                         onMouseLeave={e => (e.currentTarget.style.color = "#52506a")}
@@ -141,43 +84,50 @@ export default function UploadPage() {
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                             <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
-                        Back
+                        Back to home
                     </Link>
                 </div>
 
-                {/* Header */}
+                {/* Step badge */}
                 <div
                     className="u-anim-1"
-                    style={{ textAlign: "center", marginBottom: 40, maxWidth: 560 }}
+                    style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 6,
+                        padding: "5px 12px",
+                        borderRadius: 999,
+                        marginBottom: 28,
+                        background: "rgba(99,73,228,0.10)",
+                        border: "1px solid rgba(99,73,228,0.22)",
+                    }}
                 >
-                    {/* Step badge */}
                     <div
                         style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: 6,
-                            padding: "5px 12px",
-                            borderRadius: 999,
-                            background: "rgba(99,73,228,0.10)",
-                            border: "1px solid rgba(99,73,228,0.22)",
-                            marginBottom: 20,
+                            width: 6,
+                            height: 6,
+                            borderRadius: "50%",
+                            background: "#a78bfa",
+                            boxShadow: "0 0 8px rgba(167,139,250,0.9)",
                         }}
-                    >
-                        <span style={{ fontSize: 11, fontWeight: 600, color: "#a78bfa", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                            Step 1 of 2
-                        </span>
-                        <span style={{ width: 1, height: 10, background: "rgba(167,139,250,0.3)" }} />
-                        <span style={{ fontSize: 11, fontWeight: 500, color: "#7c7a92" }}>Upload Resume</span>
-                    </div>
+                    />
+                    <span style={{ fontSize: 11, fontWeight: 600, color: "#a78bfa", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                        Step 1 of 2
+                    </span>
+                    <span style={{ width: 1, height: 10, background: "rgba(167,139,250,0.3)" }} />
+                    <span style={{ fontSize: 11, fontWeight: 500, color: "#7c7a92" }}>Upload Resume</span>
+                </div>
 
+                {/* Heading */}
+                <div style={{ textAlign: "center", marginBottom: 40, maxWidth: 560 }}>
                     <h1
                         className="u-anim-2"
                         style={{
-                            fontSize: "clamp(28px, 4vw, 42px)",
+                            fontSize: "clamp(32px, 5vw, 52px)",
                             fontWeight: 800,
-                            lineHeight: 1.08,
+                            lineHeight: 1.06,
                             letterSpacing: "-0.04em",
-                            marginBottom: 14,
+                            marginBottom: 16,
                             background: "linear-gradient(155deg, #ffffff 0%, #ffffff 45%, rgba(196,181,253,0.75) 100%)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
@@ -186,27 +136,27 @@ export default function UploadPage() {
                     >
                         Upload your resume
                     </h1>
-
                     <p
                         className="u-anim-3"
                         style={{
-                            fontSize: "clamp(14px, 1.8vw, 16px)",
+                            fontSize: "clamp(14px, 1.8vw, 17px)",
                             color: "#7c7a92",
-                            lineHeight: 1.65,
+                            lineHeight: 1.7,
                             letterSpacing: "-0.01em",
                         }}
                     >
                         We&apos;ll extract the text and run it through our AI reviewer.
+                        <br />
                         Your file is never stored — only the text is analysed.
                     </p>
                 </div>
 
                 {/* Upload box */}
-                <div className="u-anim-3" style={{ width: "100%", maxWidth: 520, display: "flex", justifyContent: "center" }}>
+                <div className="u-anim-3" style={{ width: "100%", maxWidth: 520 }}>
                     <UploadBox />
                 </div>
 
-                {/* Steps preview */}
+                {/* Step progress strip */}
                 <div
                     className="u-anim-3"
                     style={{

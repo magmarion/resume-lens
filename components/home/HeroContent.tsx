@@ -84,9 +84,9 @@ export function HeroContent() {
                 keyword gaps, ATS score, bullet rewrites, and actionable fixes in seconds.
             </p>
 
-            {/* CTA row */}
+            {/* CTA row — only "Analyse my resume free" navigates to /upload */}
             <div className="anim-4" style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 44 }}>
-                <Link href="#" className="btn-main">
+                <Link href="/upload" className="btn-main">
                     Analyse my resume free
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                         <path d="M3 7.5H12M12 7.5L8.5 4M12 7.5L8.5 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
