@@ -79,8 +79,6 @@ export default function UploadBox() {
     const [fileName, setFileName] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
 
-    // ── Process a file through all stages ──────────────────────────────────────
-
     const processFile = useCallback(async (file: File) => {
         setFileName(file.name);
         setErrorMessage("");
@@ -101,48 +99,97 @@ export default function UploadBox() {
         const formData = new FormData();
         formData.append("file", file);
 
-        let parsed: { text: string; pageCount: number; wordCount: number };
         try {
             const res = await fetch("/api/parse-pdf", {
                 method: "POST",
                 body: formData,
             });
 
-            const data = await res.json() as { text?: string; pageCount?: number; wordCount?: number; error?: string };
+            // Parse the response
+            const data = await res.json() as {
+                text?: string;
+                pageCount?: number;
+                wordCount?: number;
+                error?: string;
+                debugInfo?: {
+                    textLength: number;
+                    pageCount: number;
+                    hasText: boolean;
+                    isScanned: boolean;
+                };
+            };
 
-            if (!res.ok || !data.text) {
-                setErrorMessage(data.error ?? "Unexpected error. Please try again.");
+            // --- Debug: Log the full response ---
+            console.log("[UploadBox] API Response:", data);
+            console.log("[UploadBox] Response status:", res.status);
+
+            // --- Handle 422 (unprocessable) status ---
+            if (res.status === 422) {
+                // Check if it's a scanned PDF
+                if (data.debugInfo?.isScanned) {
+                    setErrorMessage(
+                        "This PDF appears to be a scanned image. Please upload a text-based PDF created from Word, Google Docs, etc."
+                    );
+                } else {
+                    setErrorMessage(data.error || "Could not extract text from this PDF.");
+                }
                 setStage("error");
                 return;
             }
 
-            parsed = { text: data.text, pageCount: data.pageCount ?? 1, wordCount: data.wordCount ?? 0 };
-        } catch {
+            // --- Handle other non-OK statuses ---
+            if (!res.ok) {
+                setErrorMessage(data.error || "Upload failed. Please try again.");
+                setStage("error");
+                return;
+            }
+
+            // --- Handle success (200) ---
+            if (!data.text || data.text.trim().length === 0) {
+                setErrorMessage("Could not extract text from this PDF. It may be a scanned image.");
+                setStage("error");
+                return;
+            }
+
+            // Check if text is too short (less than 50 characters)
+            if (data.text.trim().length < 50) {
+                setErrorMessage("The extracted text is too short. Please ensure your PDF contains enough text.");
+                setStage("error");
+                return;
+            }
+
+            const parsed = {
+                text: data.text,
+                pageCount: data.pageCount ?? 1,
+                wordCount: data.wordCount ?? 0
+            };
+
+            // Stage 3: text extracted
+            setStage("parsing");
+            await new Promise(r => setTimeout(r, 700));
+
+            // Store extracted text
+            sessionStorage.setItem(
+                "resumeData",
+                JSON.stringify({
+                    text: parsed.text,
+                    pageCount: parsed.pageCount,
+                    wordCount: parsed.wordCount,
+                    fileName: file.name,
+                    uploadedAt: new Date().toISOString(),
+                })
+            );
+
+            // Stage 4: redirect
+            setStage("redirecting");
+            await new Promise(r => setTimeout(r, 500));
+            router.push("/analyze");
+
+        } catch (error) {
+            console.error("Upload error:", error);
             setErrorMessage("Network error — please check your connection and try again.");
             setStage("error");
-            return;
         }
-
-        // Stage 3: text extracted
-        setStage("parsing");
-        await new Promise(r => setTimeout(r, 700));
-
-        // Store extracted text for the analyze page to pick up
-        sessionStorage.setItem(
-            "resumeData",
-            JSON.stringify({
-                text: parsed.text,
-                pageCount: parsed.pageCount,
-                wordCount: parsed.wordCount,
-                fileName: file.name,
-                uploadedAt: new Date().toISOString(),
-            })
-        );
-
-        // Stage 4: redirect
-        setStage("redirecting");
-        await new Promise(r => setTimeout(r, 500));
-        router.push("/analyze");
     }, [router]);
 
     const onDragOver = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setDragging(true); };
