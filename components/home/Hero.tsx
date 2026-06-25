@@ -5,7 +5,6 @@ import { HeroBackground } from "./HeroBackground";
 import { HeroContent } from "./HeroContent";
 import { FloatingCard } from "./FloatingCard";
 import { TrustStrip } from "./TrustStrip";
-import { Navbar } from "../layout/Navbar";
 
 export default function Hero() {
     const [scrolled, setScrolled] = useState(false);
@@ -166,10 +165,8 @@ export default function Hero() {
                 }
             `}</style>
 
-            {/* Canvas gradient BG */}
             <HeroBackground />
 
-            {/* Vignette */}
             <div
                 aria-hidden="true"
                 style={{
@@ -177,12 +174,9 @@ export default function Hero() {
                     inset: 0,
                     zIndex: 1,
                     pointerEvents: "none",
-                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06050a 72%)",
+                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06090a 72%)",
                 }}
             />
-
-            {/* Nav */}
-            <Navbar scrolled={scrolled} />
 
             {/* ── Main hero ── */}
             <section
