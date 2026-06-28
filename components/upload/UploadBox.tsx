@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import UploadProgress, { type UploadStage } from "./UploadProgress";
 
 const ACCEPTED_TYPE = "application/pdf";
-const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
-
+const MAX_BYTES = 5 * 1024 * 1024;
 
 function validateFile(file: File): string | null {
     if (file.type !== ACCEPTED_TYPE) return "Only PDF files are supported.";
@@ -24,9 +23,7 @@ function UploadIcon({ dragging }: { dragging: boolean }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                background: dragging
-                    ? "rgba(99,73,228,0.20)"
-                    : "rgba(255,255,255,0.04)",
+                background: dragging ? "rgba(99,73,228,0.20)" : "rgba(255,255,255,0.04)",
                 border: `1px solid ${dragging ? "rgba(167,139,250,0.40)" : "rgba(255,255,255,0.08)"}`,
                 transition: "all 0.25s ease",
                 marginBottom: 20,
@@ -83,7 +80,6 @@ export default function UploadBox() {
         setFileName(file.name);
         setErrorMessage("");
 
-        // Stage 1: validate
         setStage("validating");
         await new Promise(r => setTimeout(r, 600));
 
@@ -94,107 +90,73 @@ export default function UploadBox() {
             return;
         }
 
-        // Stage 2: upload to API
         setStage("uploading");
         const formData = new FormData();
         formData.append("file", file);
 
+        let parsed: { text: string; pageCount: number; wordCount: number };
         try {
             const res = await fetch("/api/parse-pdf", {
                 method: "POST",
                 body: formData,
             });
 
-            // Parse the response
             const data = await res.json() as {
                 text?: string;
                 pageCount?: number;
                 wordCount?: number;
                 error?: string;
-                debugInfo?: {
-                    textLength: number;
-                    pageCount: number;
-                    hasText: boolean;
-                    isScanned: boolean;
-                };
             };
 
-            // --- Debug: Log the full response ---
-            console.log("[UploadBox] API Response:", data);
-            console.log("[UploadBox] Response status:", res.status);
-
-            // --- Handle 422 (unprocessable) status ---
-            if (res.status === 422) {
-                // Check if it's a scanned PDF
-                if (data.debugInfo?.isScanned) {
-                    setErrorMessage(
-                        "This PDF appears to be a scanned image. Please upload a text-based PDF created from Word, Google Docs, etc."
-                    );
-                } else {
-                    setErrorMessage(data.error || "Could not extract text from this PDF.");
-                }
+            if (!res.ok || !data.text) {
+                setErrorMessage(data.error ?? "Unexpected error. Please try again.");
                 setStage("error");
                 return;
             }
 
-            // --- Handle other non-OK statuses ---
-            if (!res.ok) {
-                setErrorMessage(data.error || "Upload failed. Please try again.");
-                setStage("error");
-                return;
-            }
-
-            // --- Handle success (200) ---
-            if (!data.text || data.text.trim().length === 0) {
-                setErrorMessage("Could not extract text from this PDF. It may be a scanned image.");
-                setStage("error");
-                return;
-            }
-
-            // Check if text is too short (less than 50 characters)
-            if (data.text.trim().length < 50) {
-                setErrorMessage("The extracted text is too short. Please ensure your PDF contains enough text.");
-                setStage("error");
-                return;
-            }
-
-            const parsed = {
+            parsed = {
                 text: data.text,
                 pageCount: data.pageCount ?? 1,
-                wordCount: data.wordCount ?? 0
+                wordCount: data.wordCount ?? 0,
             };
-
-            // Stage 3: text extracted
-            setStage("parsing");
-            await new Promise(r => setTimeout(r, 700));
-
-            // Store extracted text
-            sessionStorage.setItem(
-                "resumeData",
-                JSON.stringify({
-                    text: parsed.text,
-                    pageCount: parsed.pageCount,
-                    wordCount: parsed.wordCount,
-                    fileName: file.name,
-                    uploadedAt: new Date().toISOString(),
-                })
-            );
-
-            // Stage 4: redirect
-            setStage("redirecting");
-            await new Promise(r => setTimeout(r, 500));
-            router.push("/analyze");
-
-        } catch (error) {
-            console.error("Upload error:", error);
+        } catch {
             setErrorMessage("Network error — please check your connection and try again.");
             setStage("error");
+            return;
         }
+
+        setStage("parsing");
+        await new Promise(r => setTimeout(r, 700));
+
+        // Store the extracted text + metadata for the results page
+        sessionStorage.setItem(
+            "resumeData",
+            JSON.stringify({
+                text: parsed.text,
+                pageCount: parsed.pageCount,
+                wordCount: parsed.wordCount,
+                fileName: file.name,
+                uploadedAt: new Date().toISOString(),
+            })
+        );
+
+        // Also store the raw file as a base64 data URL so /results
+        // can render the actual PDF visually
+        const reader = new FileReader();
+        reader.onload = () => {
+            sessionStorage.setItem("resumePdfDataUrl", reader.result as string);
+        };
+        reader.readAsDataURL(file);
+
+        setStage("redirecting");
+        await new Promise(r => setTimeout(r, 600));
+
+        // ← Goes to /results, not /analyze
+        router.push("/results");
     }, [router]);
 
     const onDragOver = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setDragging(true); };
     const onDragLeave = (e: DragEvent<HTMLDivElement>) => { e.preventDefault(); setDragging(false); };
-
     const onDrop = (e: DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setDragging(false);
@@ -205,7 +167,6 @@ export default function UploadBox() {
     const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) void processFile(file);
-        // Reset input so the same file can be re-selected after an error
         e.target.value = "";
     };
 
@@ -231,12 +192,12 @@ export default function UploadBox() {
                 minHeight: 340,
                 borderRadius: 20,
                 border: `2px dashed ${dragging
-                    ? "rgba(167,139,250,0.6)"
-                    : stage === "error"
-                        ? "rgba(251,113,133,0.35)"
-                        : isProcessing
-                            ? "rgba(99,73,228,0.35)"
-                            : "rgba(255,255,255,0.09)"
+                        ? "rgba(167,139,250,0.6)"
+                        : stage === "error"
+                            ? "rgba(251,113,133,0.35)"
+                            : isProcessing
+                                ? "rgba(99,73,228,0.35)"
+                                : "rgba(255,255,255,0.09)"
                     }`,
                 background: dragging
                     ? "rgba(99,73,228,0.07)"
@@ -251,7 +212,6 @@ export default function UploadBox() {
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "40px 32px",
-                gap: 0,
                 cursor: isProcessing ? "default" : "pointer",
                 transition: "border-color 0.25s ease, background 0.25s ease",
                 boxShadow: dragging
@@ -268,11 +228,9 @@ export default function UploadBox() {
                 aria-label="Upload PDF resume"
             />
 
-            {/* ── Idle state ── */}
             {stage === "idle" && (
                 <>
                     <UploadIcon dragging={dragging} />
-
                     <div style={{ textAlign: "center", marginBottom: 24 }}>
                         <p style={{ fontSize: 17, fontWeight: 600, color: "#e8e5f5", letterSpacing: "-0.02em", marginBottom: 6 }}>
                             {dragging ? "Drop it here" : "Drop your resume here"}
@@ -285,14 +243,10 @@ export default function UploadBox() {
                             your files
                         </p>
                     </div>
-
                     <div
                         style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 6,
-                            padding: "14px 18px",
-                            borderRadius: 12,
+                            display: "flex", flexDirection: "column", gap: 6,
+                            padding: "14px 18px", borderRadius: 12,
                             background: "rgba(255,255,255,0.03)",
                             border: "1px solid rgba(255,255,255,0.06)",
                         }}
@@ -304,7 +258,6 @@ export default function UploadBox() {
                 </>
             )}
 
-            {/* ── Processing / error state ── */}
             {stage !== "idle" && (
                 <div style={{ width: "100%" }}>
                     <UploadProgress
@@ -312,25 +265,18 @@ export default function UploadBox() {
                         fileName={fileName}
                         errorMessage={errorMessage}
                     />
-
-                    {/* Try again button on error */}
                     {stage === "error" && (
                         <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
                             <button
                                 onClick={e => { e.stopPropagation(); resetToIdle(); }}
                                 style={{
-                                    display: "inline-flex",
-                                    alignItems: "center",
-                                    gap: 6,
-                                    padding: "9px 20px",
-                                    borderRadius: 9,
+                                    display: "inline-flex", alignItems: "center", gap: 6,
+                                    padding: "9px 20px", borderRadius: 9,
                                     background: "rgba(255,255,255,0.06)",
                                     border: "1px solid rgba(255,255,255,0.12)",
-                                    color: "#c4c2d4",
-                                    fontSize: 13,
-                                    fontWeight: 500,
+                                    color: "#c4c2d4", fontSize: 13, fontWeight: 500,
                                     cursor: "pointer",
-                                    transition: "background 0.2s ease, border-color 0.2s ease",
+                                    transition: "background 0.2s ease",
                                 }}
                                 onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; }}
                                 onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
