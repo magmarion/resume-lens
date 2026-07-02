@@ -112,7 +112,7 @@ export default function UploadPage() {
                         }}
                     />
                     <span style={{ fontSize: 11, fontWeight: 600, color: "#a78bfa", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                        Step 1 of 2
+                        Step 1 of 3
                     </span>
                     <span style={{ width: 1, height: 10, background: "rgba(167,139,250,0.3)" }} />
                     <span style={{ fontSize: 11, fontWeight: 500, color: "#7c7a92" }}>Upload Resume</span>
