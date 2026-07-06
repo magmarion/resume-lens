@@ -2,28 +2,12 @@ import { TRUST_COMPANIES } from "./hero.constants";
 
 export function TrustStrip() {
     return (
-        <div
-            style={{
-                position: "relative",
-                zIndex: 10,
-                borderTop: "1px solid rgba(255,255,255,0.05)",
-                padding: "28px 24px",
-            }}
-        >
-            <div
-                style={{
-                    maxWidth: 900,
-                    margin: "0 auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 16,
-                }}
-            >
-                <p style={{ fontSize: 11, fontWeight: 500, color: "#2d2b42", letterSpacing: "0.09em", textTransform: "uppercase" }}>
+        <div className="relative z-10 border-t border-white/5 py-7 px-6">
+            <div className="max-w-225 mx-auto flex flex-col items-center gap-4">
+                <p className="text-[11px] font-medium text-[#2d2b42] tracking-[0.09em] uppercase">
                     Helped candidates land roles at
                 </p>
-                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 36, alignItems: "center" }}>
+                <div className="flex flex-wrap justify-center gap-9 items-center">
                     {TRUST_COMPANIES.map((co) => (
                         <span key={co} className="logo-chip">
                             {co}

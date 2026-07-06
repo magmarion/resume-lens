@@ -5,24 +5,11 @@ interface StatPillProps {
 
 export function StatPill({ value, label }: StatPillProps) {
     return (
-        <div
-            style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 2,
-                padding: "10px 20px",
-                borderRadius: 12,
-                background: "rgba(255,255,255,0.04)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                backdropFilter: "blur(8px)",
-                minWidth: 90,
-            }}
-        >
-            <span style={{ fontSize: 20, fontWeight: 700, color: "#e8e5f5", letterSpacing: "-0.03em", lineHeight: 1 }}>
+        <div className="flex flex-col items-center gap-0.5 py-2.5 px-5 rounded-xl bg-white/4 border border-white/8 backdrop-blur-md min-w-22.5">
+            <span className="text-[20px] font-bold text-[#e8e5f5] tracking-[-0.03em] leading-none">
                 {value}
             </span>
-            <span style={{ fontSize: 11, color: "#6d6b85", fontWeight: 400, whiteSpace: "nowrap" }}>
+            <span className="text-[11px] text-[#6d6b85] font-normal whitespace-nowrap">
                 {label}
             </span>
         </div>
