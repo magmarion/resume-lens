@@ -1,8 +1,5 @@
 "use client";
 
-// components/upload/UploadProgress.tsx
-// Animated stage-by-stage progress shown after a file is dropped.
-
 interface Stage {
     id: string;
     label: string;
@@ -27,7 +24,13 @@ interface UploadProgressProps {
 function CheckIcon() {
     return (
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M2.5 6L5 8.5L9.5 3.5" stroke="#34d399" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+                d="M2.5 6L5 8.5L9.5 3.5"
+                stroke="#34d399"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
         </svg>
     );
 }
@@ -40,10 +43,21 @@ function SpinnerIcon() {
             viewBox="0 0 12 12"
             fill="none"
             aria-hidden="true"
-            style={{ animation: "spin 0.8s linear infinite" }}
+            className="animate-spin duration-[0.8s] linear"
         >
-            <circle cx="6" cy="6" r="4.5" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
-            <path d="M6 1.5A4.5 4.5 0 0 1 10.5 6" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" />
+            <circle
+                cx="6"
+                cy="6"
+                r="4.5"
+                stroke="rgba(255,255,255,0.15)"
+                strokeWidth="1.5"
+            />
+            <path
+                d="M6 1.5A4.5 4.5 0 0 1 10.5 6"
+                stroke="#a78bfa"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+            />
         </svg>
     );
 }
@@ -51,54 +65,87 @@ function SpinnerIcon() {
 export default function UploadProgress({ stage, fileName, errorMessage }: UploadProgressProps) {
     const stageIndex = STAGES.findIndex((s) => s.id === stage);
 
+    // Helper to get border color for stage items
+    const getStageBorder = (isActive: boolean, isDone: boolean) => {
+        if (isActive) return "border-violet-600/25";
+        if (isDone) return "border-emerald-400/15";
+        return "border-white/5";
+    };
+
+    // Helper to get background color for stage items
+    const getStageBackground = (isActive: boolean, isDone: boolean) => {
+        if (isActive) return "bg-violet-600/12";
+        if (isDone) return "bg-emerald-400/6";
+        return "bg-white/2";
+    };
+
+    // Helper to get icon container border color
+    const getIconBorder = (isActive: boolean, isDone: boolean) => {
+        if (isActive) return "border-violet-400/30";
+        if (isDone) return "border-emerald-400/30";
+        return "border-white/8";
+    };
+
+    // Helper to get icon container background
+    const getIconBackground = (isActive: boolean, isDone: boolean) => {
+        if (isActive) return "bg-violet-600/20";
+        if (isDone) return "bg-emerald-400/15";
+        return "bg-white/4";
+    };
+
+    // Helper to get text color for stage label
+    const getLabelColor = (isActive: boolean, isDone: boolean) => {
+        if (isDone) return "text-emerald-300";
+        if (isActive) return "text-[#e8e5f5]";
+        return "text-[#52506a]";
+    };
+
     return (
-        <div
-            style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 32,
-                padding: "8px 0",
-            }}
-        >
+        <div className="w-full flex flex-col items-center gap-8 py-2">
             {/* File name pill */}
-            <div
-                style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 8,
-                    padding: "8px 16px",
-                    borderRadius: 999,
-                    background: "rgba(99,73,228,0.10)",
-                    border: "1px solid rgba(99,73,228,0.22)",
-                    maxWidth: "100%",
-                }}
-            >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600/10 border border-violet-600/22 max-w-full">
                 {/* PDF icon */}
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                    <rect x="2" y="1" width="8" height="12" rx="1.5" stroke="#a78bfa" strokeWidth="1.2" />
-                    <path d="M9 1L12 4" stroke="#a78bfa" strokeWidth="1.2" strokeLinecap="round" />
-                    <rect x="9" y="1" width="3" height="3" rx="0.5" fill="#a78bfa" fillOpacity="0.2" stroke="#a78bfa" strokeWidth="1.2" />
-                    <path d="M4.5 6.5H9.5M4.5 9H7.5" stroke="#a78bfa" strokeWidth="1" strokeLinecap="round" />
+                    <rect
+                        x="2"
+                        y="1"
+                        width="8"
+                        height="12"
+                        rx="1.5"
+                        stroke="#a78bfa"
+                        strokeWidth="1.2"
+                    />
+                    <path
+                        d="M9 1L12 4"
+                        stroke="#a78bfa"
+                        strokeWidth="1.2"
+                        strokeLinecap="round"
+                    />
+                    <rect
+                        x="9"
+                        y="1"
+                        width="3"
+                        height="3"
+                        rx="0.5"
+                        fill="#a78bfa"
+                        fillOpacity="0.2"
+                        stroke="#a78bfa"
+                        strokeWidth="1.2"
+                    />
+                    <path
+                        d="M4.5 6.5H9.5M4.5 9H7.5"
+                        stroke="#a78bfa"
+                        strokeWidth="1"
+                        strokeLinecap="round"
+                    />
                 </svg>
-                <span
-                    style={{
-                        fontSize: 12,
-                        fontWeight: 500,
-                        color: "#c4b5fd",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        maxWidth: 260,
-                    }}
-                >
+                <span className="text-[12px] font-medium text-[#c4b5fd] truncate max-w-65">
                     {fileName}
                 </span>
             </div>
 
             {/* Stage list */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 4, width: "100%", maxWidth: 340 }}>
+            <div className="flex flex-col gap-1 w-full max-w-85">
                 {STAGES.map((s, i) => {
                     const isDone = stageIndex > i;
                     const isActive = stageIndex === i;
@@ -107,72 +154,35 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
                     return (
                         <div
                             key={s.id}
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 12,
-                                padding: "10px 14px",
-                                borderRadius: 10,
-                                background: isActive
-                                    ? "rgba(99,73,228,0.12)"
-                                    : isDone
-                                        ? "rgba(52,211,153,0.06)"
-                                        : "rgba(255,255,255,0.02)",
-                                border: `1px solid ${isActive
-                                        ? "rgba(99,73,228,0.25)"
-                                        : isDone
-                                            ? "rgba(52,211,153,0.15)"
-                                            : "rgba(255,255,255,0.05)"
-                                    }`,
-                                transition: "all 0.3s ease",
-                                opacity: isPending ? 0.4 : 1,
-                            }}
+                            className={`flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] transition-all duration-300 ${getStageBackground(isActive, isDone)
+                                } border ${getStageBorder(isActive, isDone)} ${isPending ? "opacity-40" : "opacity-100"
+                                }`}
                         >
                             {/* Status icon */}
                             <div
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                    borderRadius: "50%",
-                                    flexShrink: 0,
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    background: isDone
-                                        ? "rgba(52,211,153,0.15)"
-                                        : isActive
-                                            ? "rgba(99,73,228,0.20)"
-                                            : "rgba(255,255,255,0.04)",
-                                    border: `1px solid ${isDone
-                                            ? "rgba(52,211,153,0.30)"
-                                            : isActive
-                                                ? "rgba(167,139,250,0.30)"
-                                                : "rgba(255,255,255,0.08)"
-                                        }`,
-                                }}
+                                className={`w-6 h-6 rounded-full shrink-0 flex items-center justify-center border ${getIconBorder(
+                                    isActive,
+                                    isDone
+                                )} ${getIconBackground(isActive, isDone)}`}
                             >
                                 {isDone && <CheckIcon />}
                                 {isActive && <SpinnerIcon />}
                                 {isPending && (
-                                    <span style={{ fontSize: 10, color: "#52506a", fontWeight: 600 }}>
+                                    <span className="text-[10px] text-[#52506a] font-semibold">
                                         {i + 1}
                                     </span>
                                 )}
                             </div>
 
-                            <div style={{ flex: 1, minWidth: 0 }}>
+                            <div className="flex-1 min-w-0">
                                 <div
-                                    style={{
-                                        fontSize: 13,
-                                        fontWeight: isActive ? 600 : 400,
-                                        color: isDone ? "#6ee7b7" : isActive ? "#e8e5f5" : "#52506a",
-                                        letterSpacing: "-0.01em",
-                                    }}
+                                    className={`text-[13px] ${isActive ? "font-semibold" : "font-normal"
+                                        } ${getLabelColor(isActive, isDone)} tracking-[-0.01em]`}
                                 >
                                     {s.label}
                                 </div>
                                 {isActive && (
-                                    <div style={{ fontSize: 11, color: "#7c7a92", marginTop: 1 }}>
+                                    <div className="text-[11px] text-[#7c7a92] mt-px">
                                         {s.sublabel}
                                     </div>
                                 )}
@@ -184,20 +194,11 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
 
             {/* Error state */}
             {stage === "error" && errorMessage && (
-                <div
-                    style={{
-                        width: "100%",
-                        maxWidth: 340,
-                        padding: "12px 16px",
-                        borderRadius: 10,
-                        background: "rgba(251,113,133,0.08)",
-                        border: "1px solid rgba(251,113,133,0.20)",
-                    }}
-                >
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "#fb7185", marginBottom: 4 }}>
+                <div className="w-full max-w-85 p-3 px-4 rounded-[10px] bg-rose-400/8 border border-rose-400/20">
+                    <div className="text-[12px] font-semibold text-rose-400 mb-1">
                         Upload failed
                     </div>
-                    <div style={{ fontSize: 12, color: "#9f9cb8", lineHeight: 1.5 }}>
+                    <div className="text-[12px] text-[#9f9cb8] leading-normal">
                         {errorMessage}
                     </div>
                 </div>
