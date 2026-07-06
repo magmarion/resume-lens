@@ -27,17 +27,14 @@ export default function Hero() {
                 }}
             />
 
-            {/* ── Main hero ── */}
             <section
-                className="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center max-w-[1140px] mx-auto px-10 py-25 lg:py-20 gap-16"
+                className="relative z-10 min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center max-w-285 mx-auto px-10 py-25 lg:py-20 gap-16"
             >
                 {/* Left: copy */}
                 <HeroContent />
 
                 {/* Right: floating card */}
-                <div
-                    className="flex items-center justify-center relative"
-                >
+                <div className="flex items-center relative justify-self-end">
                     {/* Glow behind card */}
                     <div
                         aria-hidden="true"

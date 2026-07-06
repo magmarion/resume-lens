@@ -16,18 +16,10 @@ function validateFile(file: File): string | null {
 function UploadIcon({ dragging }: { dragging: boolean }) {
     return (
         <div
-            style={{
-                width: 64,
-                height: 64,
-                borderRadius: 18,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: dragging ? "rgba(99,73,228,0.20)" : "rgba(255,255,255,0.04)",
-                border: `1px solid ${dragging ? "rgba(167,139,250,0.40)" : "rgba(255,255,255,0.08)"}`,
-                transition: "all 0.25s ease",
-                marginBottom: 20,
-            }}
+            className={`w-16 h-16 rounded-[18px] flex items-center justify-center mb-5 transition-all duration-250 border ${dragging
+                    ? "bg-violet-600/20 border-violet-400/40"
+                    : "bg-white/4 border-white/8"
+                }`}
         >
             <svg
                 width="28"
@@ -35,10 +27,8 @@ function UploadIcon({ dragging }: { dragging: boolean }) {
                 viewBox="0 0 28 28"
                 fill="none"
                 aria-hidden="true"
-                style={{
-                    transition: "transform 0.25s ease",
-                    transform: dragging ? "translateY(-3px)" : "translateY(0)",
-                }}
+                className={`transition-transform duration-250 ${dragging ? "translate-y-0.75" : "translate-y-0"
+                    }`}
             >
                 <path
                     d="M14 18V10M14 10L10.5 13.5M14 10L17.5 13.5"
@@ -60,9 +50,9 @@ function UploadIcon({ dragging }: { dragging: boolean }) {
 
 function TipRow({ icon, text }: { icon: string; text: string }) {
     return (
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 12 }}>{icon}</span>
-            <span style={{ fontSize: 12, color: "#52506a" }}>{text}</span>
+        <div className="flex items-center gap-1.5">
+            <span className="text-[12px]">{icon}</span>
+            <span className="text-[12px] text-[#52506a]">{text}</span>
         </div>
     );
 }
@@ -178,6 +168,30 @@ export default function UploadBox() {
 
     const isProcessing = stage !== "idle" && stage !== "error";
 
+    // Determine border color based on state
+    const getBorderColor = () => {
+        if (dragging) return "border-violet-400/60";
+        if (stage === "error") return "border-rose-400/35";
+        if (isProcessing) return "border-violet-600/35";
+        return "border-white/9";
+    };
+
+    // Determine background color based on state
+    const getBackgroundColor = () => {
+        if (dragging) return "bg-violet-600/7";
+        if (stage === "error") return "bg-rose-400/3";
+        if (isProcessing) return "bg-violet-600/4";
+        return "bg-white/3";
+    };
+
+    // Determine shadow based on state
+    const getShadow = () => {
+        if (dragging) {
+            return "shadow-[0_0_0_4px_rgba(99,73,228,0.10),0_20px_60px_rgba(0,0,0,0.5)]";
+        }
+        return "shadow-[0_20px_60px_rgba(0,0,0,0.4)]";
+    };
+
     return (
         <div
             onDragOver={onDragOver}
@@ -186,71 +200,37 @@ export default function UploadBox() {
             onClick={() => {
                 if (stage === "idle" || stage === "error") inputRef.current?.click();
             }}
-            style={{
-                width: "100%",
-                maxWidth: 520,
-                minHeight: 340,
-                borderRadius: 20,
-                border: `2px dashed ${dragging
-                        ? "rgba(167,139,250,0.6)"
-                        : stage === "error"
-                            ? "rgba(251,113,133,0.35)"
-                            : isProcessing
-                                ? "rgba(99,73,228,0.35)"
-                                : "rgba(255,255,255,0.09)"
-                    }`,
-                background: dragging
-                    ? "rgba(99,73,228,0.07)"
-                    : stage === "error"
-                        ? "rgba(251,113,133,0.03)"
-                        : isProcessing
-                            ? "rgba(99,73,228,0.04)"
-                            : "rgba(255,255,255,0.025)",
-                backdropFilter: "blur(16px)",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "40px 32px",
-                cursor: isProcessing ? "default" : "pointer",
-                transition: "border-color 0.25s ease, background 0.25s ease",
-                boxShadow: dragging
-                    ? "0 0 0 4px rgba(99,73,228,0.10), 0 20px 60px rgba(0,0,0,0.5)"
-                    : "0 20px 60px rgba(0,0,0,0.4)",
-            }}
+            className={`w-full max-w-130 min-h-85 rounded-[20px] border-2 border-dashed ${getBorderColor()} ${getBackgroundColor()} backdrop-blur-bg flex flex-col items-center justify-center px-8 py-10 transition-all duration-250 ${getShadow()} ${isProcessing ? "cursor-default" : "cursor-pointer"
+                }`}
         >
             <input
                 ref={inputRef}
                 type="file"
                 accept="application/pdf"
-                style={{ display: "none" }}
+                className="hidden"
                 onChange={onFileChange}
                 aria-label="Upload PDF resume"
             />
 
+            {/* ── Idle state ── */}
             {stage === "idle" && (
                 <>
                     <UploadIcon dragging={dragging} />
-                    <div style={{ textAlign: "center", marginBottom: 24 }}>
-                        <p style={{ fontSize: 17, fontWeight: 600, color: "#e8e5f5", letterSpacing: "-0.02em", marginBottom: 6 }}>
+
+                    <div className="text-center mb-6">
+                        <p className="text-[17px] font-semibold text-[#e8e5f5] tracking-[-0.02em] mb-1.5">
                             {dragging ? "Drop it here" : "Drop your resume here"}
                         </p>
-                        <p style={{ fontSize: 13, color: "#52506a", lineHeight: 1.6 }}>
+                        <p className="text-[13px] text-[#52506a] leading-[1.6]">
                             or{" "}
-                            <span style={{ color: "#a78bfa", fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 3 }}>
+                            <span className="text-[#a78bfa] font-medium underline underline-offset-[3px]">
                                 click to browse
                             </span>{" "}
                             your files
                         </p>
                     </div>
-                    <div
-                        style={{
-                            display: "flex", flexDirection: "column", gap: 6,
-                            padding: "14px 18px", borderRadius: 12,
-                            background: "rgba(255,255,255,0.03)",
-                            border: "1px solid rgba(255,255,255,0.06)",
-                        }}
-                    >
+
+                    <div className="flex flex-col gap-1.5 p-[14px_18px] rounded-xl bg-white/3 border border-white/6">
                         <TipRow icon="📄" text="PDF format only" />
                         <TipRow icon="📏" text="Maximum file size: 5 MB" />
                         <TipRow icon="🔒" text="Your file is never stored" />
@@ -258,32 +238,36 @@ export default function UploadBox() {
                 </>
             )}
 
+            {/* ── Processing / error state ── */}
             {stage !== "idle" && (
-                <div style={{ width: "100%" }}>
+                <div className="w-full">
                     <UploadProgress
                         stage={stage}
                         fileName={fileName}
                         errorMessage={errorMessage}
                     />
+
+                    {/* Try again button on error */}
                     {stage === "error" && (
-                        <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
+                        <div className="flex justify-center mt-5">
                             <button
                                 onClick={e => { e.stopPropagation(); resetToIdle(); }}
-                                style={{
-                                    display: "inline-flex", alignItems: "center", gap: 6,
-                                    padding: "9px 20px", borderRadius: 9,
-                                    background: "rgba(255,255,255,0.06)",
-                                    border: "1px solid rgba(255,255,255,0.12)",
-                                    color: "#c4c2d4", fontSize: 13, fontWeight: 500,
-                                    cursor: "pointer",
-                                    transition: "background 0.2s ease",
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.10)"; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.06)"; }}
+                                className="inline-flex items-center gap-1.5 px-5 py-2.25 rounded-[9px] bg-white/6 border border-white/12 text-[#c4c2d4] text-[13px] font-medium cursor-pointer transition-colors duration-200 hover:bg-white/10"
                             >
                                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
-                                    <path d="M2 6.5A4.5 4.5 0 0 1 10.5 3.5M11 6.5A4.5 4.5 0 0 1 2.5 9.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-                                    <path d="M10 1.5L10.5 3.5L8.5 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path
+                                        d="M2 6.5A4.5 4.5 0 0 1 10.5 3.5M11 6.5A4.5 4.5 0 0 1 2.5 9.5"
+                                        stroke="currentColor"
+                                        strokeWidth="1.4"
+                                        strokeLinecap="round"
+                                    />
+                                    <path
+                                        d="M10 1.5L10.5 3.5L8.5 4"
+                                        stroke="currentColor"
+                                        strokeWidth="1.4"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
                                 </svg>
                                 Try again
                             </button>

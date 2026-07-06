@@ -3,104 +3,77 @@ import { RESUME_CHECKS } from "./hero.constants";
 
 export function FloatingCard() {
     return (
-        <div
-            style={{
-                width: "100%",
-                maxWidth: 400,
-                borderRadius: 16,
-                border: "1px solid rgba(255,255,255,0.09)",
-                background: "linear-gradient(145deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.018) 100%)",
-                backdropFilter: "blur(24px)",
-                boxShadow: "0 0 0 1px rgba(0,0,0,0.4), 0 32px 80px rgba(0,0,0,0.65), 0 0 60px rgba(99,73,228,0.1)",
-                overflow: "hidden",
-            }}
-        >
+        <div className="w-full max-w-100 rounded-2xl border border-white/9 bg-linear-to-br from-white/6 to-white/2 backdrop-blur-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.4),0_32px_80px_rgba(0,0,0,0.65),0_0_60px_rgba(99,73,228,0.1)] overflow-hidden">
             {/* Card header */}
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "14px 18px",
-                    borderBottom: "1px solid rgba(255,255,255,0.06)",
-                    background: "rgba(0,0,0,0.15)",
-                }}
-            >
+            <div className="flex items-center justify-between px-4.5 py-3.5 border-b border-white/6 bg-black/15">
                 <div>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: "#e8e5f5", letterSpacing: "-0.01em" }}>
+                    <div className="text-[13px] font-semibold text-[#e8e5f5] tracking-[-0.01em]">
                         Resume Analysis
                     </div>
-                    <div style={{ fontSize: 11, color: "#52506a", marginTop: 1 }}>Senior Frontend Engineer · Google</div>
+                    <div className="text-[11px] text-[#52506a] mt-px">
+                        Senior Frontend Engineer · Google
+                    </div>
                 </div>
                 <ScoreRing />
             </div>
 
             {/* Checks */}
-            <div style={{ padding: "14px 18px 18px" }}>
-                <div style={{ fontSize: 10, fontWeight: 600, color: "#3d3b52", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 10 }}>
+            <div className="px-4.5 py-3.5 pb-4.5">
+                <div className="text-[10px] font-semibold text-[#3d3b52] tracking-[0.08em] uppercase mb-2.5">
                     Review Summary
                 </div>
+
                 {RESUME_CHECKS.map((c) => (
                     <div
                         key={c.label}
-                        style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            gap: 10,
-                            padding: "8px 0",
-                            borderBottom: "1px solid rgba(255,255,255,0.04)",
-                        }}
+                        className="flex items-start gap-2.5 py-2 border-b border-white/4"
                     >
                         {/* Icon */}
                         <div
-                            style={{
-                                width: 18,
-                                height: 18,
-                                borderRadius: "50%",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                flexShrink: 0,
-                                marginTop: 1,
-                                background: c.ok ? "rgba(52,211,153,0.15)" : "rgba(251,113,133,0.15)",
-                                border: `1px solid ${c.ok ? "rgba(52,211,153,0.3)" : "rgba(251,113,133,0.3)"}`,
-                            }}
+                            className={`w-4.5 h-4.5 rounded-full flex items-center justify-center shrink-0 mt-px border ${c.ok
+                                    ? "bg-emerald-400/15 border-emerald-400/30"
+                                    : "bg-rose-400/15 border-rose-400/30"
+                                }`}
                         >
                             {c.ok ? (
                                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                                    <path d="M2 5L4 7L8 3" stroke="#34d399" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path
+                                        d="M2 5L4 7L8 3"
+                                        stroke="#34d399"
+                                        strokeWidth="1.4"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
                                 </svg>
                             ) : (
                                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                                    <path d="M3 3L7 7M7 3L3 7" stroke="#fb7185" strokeWidth="1.4" strokeLinecap="round" />
+                                    <path
+                                        d="M3 3L7 7M7 3L3 7"
+                                        stroke="#fb7185"
+                                        strokeWidth="1.4"
+                                        strokeLinecap="round"
+                                    />
                                 </svg>
                             )}
                         </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: 12, fontWeight: 500, color: "#c4c2d4", letterSpacing: "-0.01em" }}>
+
+                        <div className="flex-1 min-w-0">
+                            <div className="text-[12px] font-medium text-[#c4c2d4] tracking-[-0.01em]">
                                 {c.label}
                             </div>
-                            <div style={{ fontSize: 11, color: "#52506a", marginTop: 1 }}>{c.note}</div>
+                            <div className="text-[11px] text-[#52506a] mt-px">{c.note}</div>
                         </div>
                     </div>
                 ))}
 
                 {/* AI suggestion chip */}
-                <div
-                    style={{
-                        marginTop: 12,
-                        padding: "10px 12px",
-                        borderRadius: 10,
-                        background: "rgba(99,73,228,0.10)",
-                        border: "1px solid rgba(99,73,228,0.22)",
-                    }}
-                >
-                    <div style={{ fontSize: 10, fontWeight: 600, color: "#a78bfa", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 4 }}>
+                <div className="mt-3 p-[10px_12px] rounded-[10px] bg-violet-600/10 border border-violet-600/22">
+                    <div className="text-[10px] font-semibold text-[#a78bfa] tracking-[0.06em] uppercase mb-1">
                         AI Suggestion
                     </div>
-                    <div style={{ fontSize: 11.5, color: "#9f9cb8", lineHeight: 1.55 }}>
-                        Replace <span style={{ color: "#fb7185" }}>&quot;responsible for leading&quot;</span> with{" "}
-                        <span style={{ color: "#34d399" }}>&quot;led a 6-person team that shipped…&quot;</span> to add measurable impact.
+                    <div className="text-[11.5px] text-[#9f9cb8] leading-[1.55]">
+                        Replace <span className="text-rose-400">&quot;responsible for leading&quot;</span> with{" "}
+                        <span className="text-emerald-400">&quot;led a 6-person team that shipped…&quot;</span> to add measurable impact.
                     </div>
                 </div>
             </div>

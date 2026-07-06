@@ -7,26 +7,31 @@ export function ScoreRing() {
     const dash = (score / 100) * circ;
 
     return (
-        <div
-            style={{
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: 96,
-                height: 96,
-            }}
-        >
-            <svg width="96" height="96" viewBox="0 0 96 96" style={{ transform: "rotate(-90deg)" }}>
-                <circle cx="48" cy="48" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="7" />
+        <div className="relative flex items-center justify-center w-24 h-24">
+            <svg
+                width="96"
+                height="96"
+                viewBox="0 0 96 96"
+                className="-rotate-90"
+            >
                 <circle
-                    cx="48" cy="48" r={radius}
+                    cx="48"
+                    cy="48"
+                    r={radius}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.06)"
+                    strokeWidth="7"
+                />
+                <circle
+                    cx="48"
+                    cy="48"
+                    r={radius}
                     fill="none"
                     stroke="url(#scoreGrad)"
                     strokeWidth="7"
                     strokeLinecap="round"
                     strokeDasharray={`${dash} ${circ}`}
-                    style={{ transition: "stroke-dasharray 1s ease" }}
+                    className="transition-[stroke-dasharray] duration-1000 ease-[ease]"
                 />
                 <defs>
                     <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="0">
@@ -35,11 +40,11 @@ export function ScoreRing() {
                     </linearGradient>
                 </defs>
             </svg>
-            <div style={{ position: "absolute", textAlign: "center" }}>
-                <div style={{ fontSize: 20, fontWeight: 750, color: "#e8e5f5", letterSpacing: "-0.03em", lineHeight: 1 }}>
+            <div className="absolute text-center">
+                <div className="text-[20px] font-[750] text-[#e8e5f5] tracking-[-0.03em] leading-none">
                     {score}
                 </div>
-                <div style={{ fontSize: 9, color: "#6d6b85", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+                <div className="text-[9px] text-[#6d6b85] font-medium tracking-[0.04em] uppercase">
                     Score
                 </div>
             </div>
