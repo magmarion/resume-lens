@@ -1,4 +1,3 @@
-// pdf-parse.d.ts
 declare module 'pdf-parse' {
     interface PDFData {
         text: string;
