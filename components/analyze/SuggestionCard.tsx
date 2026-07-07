@@ -7,65 +7,47 @@ interface SuggestionCardProps {
 
 export default function SuggestionCard({ suggestion, index }: SuggestionCardProps) {
     return (
-        <div style={{
-            borderRadius: 14,
-            border: "1px solid rgba(255,255,255,0.08)",
-            background: "linear-gradient(145deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.015) 100%)",
-            backdropFilter: "blur(16px)",
-            overflow: "hidden",
-        }}>
+        <div className="rounded-xl border border-white/8 bg-linear-to-br from-white/5 to-white/2 backdrop-blur-lg overflow-hidden">
             {/* Number + reason header */}
-            <div style={{
-                display: "flex", alignItems: "center", gap: 10,
-                padding: "12px 16px",
-                borderBottom: "1px solid rgba(255,255,255,0.06)",
-                background: "rgba(99,73,228,0.06)",
-            }}>
-                <div style={{
-                    width: 22, height: 22, borderRadius: "50%", flexShrink: 0,
-                    background: "rgba(99,73,228,0.20)", border: "1px solid rgba(167,139,250,0.30)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 11, fontWeight: 700, color: "#a78bfa",
-                }}>
+            <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/6 bg-violet-600/6">
+                <div className="size-5.5 rounded-full shrink-0 bg-violet-600/20 border border-violet-400/30 flex items-center justify-center text-[11px] font-bold text-[#a78bfa]">
                     {index + 1}
                 </div>
-                <p style={{ fontSize: 12, color: "#9f9cb8", lineHeight: 1.5, letterSpacing: "-0.01em", margin: 0 }}>
+                <p className="text-[12px] text-[#9f9cb8] leading-normal tracking-[-0.01em] m-0">
                     {suggestion.reason}
                 </p>
             </div>
 
-            <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+            <div className="p-[14px_16px] flex flex-col gap-2.5">
                 {/* Original */}
-                <div style={{
-                    padding: "10px 14px", borderRadius: 8,
-                    background: "rgba(251,113,133,0.07)",
-                    border: "1px solid rgba(251,113,133,0.15)",
-                }}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: "#fb7185", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 5 }}>
+                <div className="p-[10px_14px] rounded-lg bg-rose-400/7 border border-rose-400/15">
+                    <div className="text-[10px] font-semibold text-rose-400 tracking-[0.06em] uppercase mb-1.25">
                         Original
                     </div>
-                    <p style={{ fontSize: 13, color: "#9f9cb8", lineHeight: 1.6, margin: 0, fontStyle: "italic" }}>
+                    <p className="text-[13px] text-[#9f9cb8] leading-[1.6] m-0 italic">
                         &ldquo;{suggestion.original}&rdquo;
                     </p>
                 </div>
 
                 {/* Arrow */}
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div className="flex justify-center">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                        <path d="M8 2V14M8 14L4 10M8 14L12 10" stroke="#52506a" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                        <path
+                            d="M8 2V14M8 14L4 10M8 14L12 10"
+                            stroke="#52506a"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
                     </svg>
                 </div>
 
                 {/* Improved */}
-                <div style={{
-                    padding: "10px 14px", borderRadius: 8,
-                    background: "rgba(52,211,153,0.07)",
-                    border: "1px solid rgba(52,211,153,0.18)",
-                }}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: "#34d399", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 5 }}>
+                <div className="p-[10px_14px] rounded-lg bg-emerald-400/7 border border-emerald-400/18">
+                    <div className="text-[10px] font-semibold text-emerald-400 tracking-[0.06em] uppercase mb-1.25">
                         Improved
                     </div>
-                    <p style={{ fontSize: 13, color: "#c4c2d4", lineHeight: 1.6, margin: 0 }}>
+                    <p className="text-[13px] text-[#c4c2d4] leading-[1.6] m-0">
                         {suggestion.improved}
                     </p>
                 </div>

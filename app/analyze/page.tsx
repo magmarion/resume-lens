@@ -53,7 +53,7 @@ export default function AnalyzePage() {
                     body: JSON.stringify({ text: resumeData.text, fileName: resumeData.fileName }),
                 });
 
-                const data = await res.json() as AnalysisResult & { error?: string };
+                const data = (await res.json()) as AnalysisResult & { error?: string };
 
                 if (!res.ok || data.error) {
                     setErrorMsg(data.error ?? "Something went wrong. Please try again.");
@@ -74,13 +74,8 @@ export default function AnalyzePage() {
 
     return (
         <>
+            {/* Custom animations - need to stay in style tag */}
             <style>{`
-        body {
-          font-family: 'Inter', system-ui, -apple-system, sans-serif;
-          background: #06050a;
-          color: #f1f0f5;
-          overflow-x: hidden;
-        }
         @keyframes fadeUp {
           from { opacity: 0; transform: translateY(18px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -100,62 +95,54 @@ export default function AnalyzePage() {
             <HeroBackground />
             <div
                 aria-hidden="true"
+                className="fixed inset-0 z-1 pointer-events-none"
                 style={{
-                    position: "fixed", inset: 0, zIndex: 1, pointerEvents: "none",
                     background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06090a 72%)",
                 }}
             />
 
-            <main style={{
-                position: "relative", zIndex: 10,
-                minHeight: "100vh",
-                display: "flex", flexDirection: "column", alignItems: "center",
-                padding: "90px 24px 80px",
-            }}>
+            <main className="relative z-10 min-h-screen flex flex-col items-center px-6 pt-22.5 pb-20">
                 {/* Back link */}
-                <div className="an-1" style={{ position: "absolute", top: 72, left: 32 }}>
+                <div className="an-1 absolute top-18 left-8">
                     <Link
                         href="/results"
-                        style={{
-                            display: "inline-flex", alignItems: "center", gap: 6,
-                            fontSize: 13, fontWeight: 500, color: "#52506a",
-                            textDecoration: "none", transition: "color 0.15s ease",
-                        }}
-                        onMouseEnter={e => (e.currentTarget.style.color = "#c4b5fd")}
-                        onMouseLeave={e => (e.currentTarget.style.color = "#52506a")}
+                        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#52506a] no-underline transition-colors duration-150 hover:text-[#c4b5fd]"
                     >
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path
+                                d="M9 2L4 7L9 12"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
                         </svg>
                         Back
                     </Link>
                 </div>
 
                 {/* Header */}
-                <div className="an-1" style={{
-                    display: "inline-flex", alignItems: "center", gap: 6,
-                    padding: "5px 12px", borderRadius: 999, marginBottom: 24,
-                    background: "rgba(99,73,228,0.10)", border: "1px solid rgba(99,73,228,0.22)",
-                }}>
-                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#a78bfa", boxShadow: "0 0 8px rgba(167,139,250,0.9)" }} />
-                    <span style={{ fontSize: 11, fontWeight: 600, color: "#a78bfa", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                <div className="an-1 inline-flex items-center gap-1.5 px-3 py-1.25 rounded-full mb-6 bg-violet-600/10 border border-violet-600/22">
+                    <div className="size-1.5 rounded-full bg-[#a78bfa] shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+                    <span className="text-[11px] font-semibold text-[#a78bfa] tracking-wider uppercase">
                         Step 3 of 3
                     </span>
-                    <span style={{ width: 1, height: 10, background: "rgba(167,139,250,0.3)" }} />
-                    <span style={{ fontSize: 11, fontWeight: 500, color: "#7c7a92" }}>AI Analysis</span>
+                    <span className="w-px h-2.5 bg-violet-400/30" />
+                    <span className="text-[11px] font-medium text-[#7c7a92]">AI Analysis</span>
                 </div>
 
-                <h1 className="an-2" style={{
-                    fontSize: "clamp(26px, 4vw, 42px)",
-                    fontWeight: 800, letterSpacing: "-0.04em", textAlign: "center", marginBottom: 8,
-                    background: "linear-gradient(155deg, #ffffff 0%, #ffffff 45%, rgba(196,181,253,0.75) 100%)",
-                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-                }}>
-                    {status === "loading" ? "Analysing your resume…" : status === "error" ? "Analysis failed" : "Your resume analysis"}
+                <h1
+                    className="an-2 text-[clamp(26px,4vw,42px)] font-extrabold tracking-[-0.04em] text-center mb-2 bg-linear-to-b from-white via-white to-[rgba(196,181,253,0.75)] bg-clip-text text-transparent"
+                >
+                    {status === "loading"
+                        ? "Analysing your resume…"
+                        : status === "error"
+                            ? "Analysis failed"
+                            : "Your resume analysis"}
                 </h1>
 
                 {resumeData && (
-                    <p className="an-2" style={{ fontSize: 14, color: "#52506a", textAlign: "center", marginBottom: 40 }}>
+                    <p className="an-2 text-[14px] text-[#52506a] text-center mb-10">
                         {status === "loading"
                             ? `Analysing ${resumeData.fileName} · ${resumeData.wordCount.toLocaleString()} words`
                             : resumeData.fileName}
@@ -164,20 +151,22 @@ export default function AnalyzePage() {
 
                 {/* ── Loading ── */}
                 {status === "loading" && (
-                    <div className="an-3" style={{ width: "100%", maxWidth: 860 }}>
+                    <div className="an-3 w-full max-w-215">
                         {/* Thinking indicator */}
-                        <div style={{
-                            display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                            marginBottom: 36,
-                            padding: "12px 20px", borderRadius: 999,
-                            background: "rgba(99,73,228,0.08)", border: "1px solid rgba(99,73,228,0.18)",
-                            width: "fit-content", margin: "0 auto 36px",
-                        }}>
-                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ animation: "spin 0.9s linear infinite", flexShrink: 0 }} aria-hidden="true">
+                        <div className="flex items-center justify-center gap-2.5 mb-9 px-5 py-3 rounded-full bg-violet-600/8 border border-violet-600/18 w-fit mx-auto">
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 14 14"
+                                fill="none"
+                                className="animate-spin shrink-0"
+                                style={{ animationDuration: "0.9s" }}
+                                aria-hidden="true"
+                            >
                                 <circle cx="7" cy="7" r="5.5" stroke="rgba(167,139,250,0.25)" strokeWidth="1.5" />
                                 <path d="M7 1.5A5.5 5.5 0 0 1 12.5 7" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" />
                             </svg>
-                            <span style={{ fontSize: 13, color: "#9f9cb8", fontWeight: 500 }}>
+                            <span className="text-[13px] text-[#9f9cb8] font-medium">
                                 Your resume is being analysed by AI. This may take a few moments depending on the length of your resume.
                             </span>
                         </div>
@@ -187,19 +176,13 @@ export default function AnalyzePage() {
 
                 {/* ── Error ── */}
                 {status === "error" && (
-                    <div className="an-3" style={{
-                        maxWidth: 480, width: "100%",
-                        padding: "24px", borderRadius: 16,
-                        background: "rgba(251,113,133,0.06)",
-                        border: "1px solid rgba(251,113,133,0.20)",
-                        textAlign: "center",
-                    }}>
-                        <div style={{ fontSize: 14, color: "#fb7185", fontWeight: 500, marginBottom: 8 }}>
-                            {errorMsg}
-                        </div>
+                    <div className="an-3 max-w-120 w-full p-6 rounded-2xl bg-rose-400/6 border border-rose-400/20 text-center">
+                        <div className="text-[14px] text-rose-400 font-medium mb-2">{errorMsg}</div>
                         <button
                             onClick={() => {
-                                setStatus("loading"); setErrorMsg(""); void (async () => {
+                                setStatus("loading");
+                                setErrorMsg("");
+                                void (async () => {
                                     if (!resumeData) return;
                                     try {
                                         const res = await fetch("/api/analyze", {
@@ -207,17 +190,21 @@ export default function AnalyzePage() {
                                             headers: { "Content-Type": "application/json" },
                                             body: JSON.stringify({ text: resumeData.text, fileName: resumeData.fileName }),
                                         });
-                                        const data = await res.json() as AnalysisResult & { error?: string };
-                                        if (!res.ok || data.error) { setErrorMsg(data.error ?? "Error"); setStatus("error"); return; }
-                                        setResult(data); setStatus("success");
-                                    } catch { setErrorMsg("Network error."); setStatus("error"); }
+                                        const data = (await res.json()) as AnalysisResult & { error?: string };
+                                        if (!res.ok || data.error) {
+                                            setErrorMsg(data.error ?? "Error");
+                                            setStatus("error");
+                                            return;
+                                        }
+                                        setResult(data);
+                                        setStatus("success");
+                                    } catch {
+                                        setErrorMsg("Network error.");
+                                        setStatus("error");
+                                    }
                                 })();
                             }}
-                            style={{
-                                marginTop: 16, padding: "9px 20px", borderRadius: 9,
-                                background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)",
-                                color: "#c4c2d4", fontSize: 13, fontWeight: 500, cursor: "pointer",
-                            }}
+                            className="mt-4 px-5 py-2.25 rounded-[9px] bg-white/6 border border-white/12 text-[#c4c2d4] text-[13px] font-medium cursor-pointer hover:bg-white/10 transition-colors duration-200"
                         >
                             Try again
                         </button>
@@ -226,27 +213,15 @@ export default function AnalyzePage() {
 
                 {/* ── Results ── */}
                 {status === "success" && result && (
-                    <div style={{ width: "100%", maxWidth: 860, display: "flex", flexDirection: "column", gap: 20 }}>
-
+                    <div className="w-full max-w-215 flex flex-col gap-5">
                         {/* Score + Summary */}
-                        <div className="an-3" style={{
-                            borderRadius: 20,
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            background: "linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.018) 100%)",
-                            backdropFilter: "blur(24px)",
-                            boxShadow: "0 0 0 1px rgba(0,0,0,0.3), 0 24px 60px rgba(0,0,0,0.4)",
-                            padding: "28px 32px",
-                            display: "grid",
-                            gridTemplateColumns: "auto 1fr",
-                            gap: 32,
-                            alignItems: "center",
-                        }}>
+                        <div className="an-3 rounded-[20px] border border-white/8 bg-linear-to-br from-white/5 to-white/2 backdrop-blur-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.3),0_24px_60px_rgba(0,0,0,0.4)] p-7 sm:p-8 grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-8 items-center">
                             <ScoreGauge score={result.score} atsSafe={result.atsSafe} />
                             <div>
-                                <div style={{ fontSize: 10, fontWeight: 600, color: "#3d3b52", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 10 }}>
+                                <div className="text-[10px] font-semibold text-[#3d3b52] tracking-[0.08em] uppercase mb-2.5">
                                     Summary
                                 </div>
-                                <p style={{ fontSize: 15, color: "#c4c2d4", lineHeight: 1.7, letterSpacing: "-0.01em", margin: 0 }}>
+                                <p className="text-[15px] text-[#c4c2d4] leading-[1.7] tracking-[-0.01em] m-0">
                                     {result.summary}
                                 </p>
                             </div>
@@ -263,11 +238,11 @@ export default function AnalyzePage() {
                         </div>
 
                         {/* Suggestions header */}
-                        <div className="an-5" style={{ marginTop: 8 }}>
-                            <div style={{ fontSize: 10, fontWeight: 600, color: "#3d3b52", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>
+                        <div className="an-5 mt-2">
+                            <div className="text-[10px] font-semibold text-[#3d3b52] tracking-[0.08em] uppercase mb-3.5">
                                 AI Bullet Rewrites
                             </div>
-                            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                            <div className="flex flex-col gap-3.5">
                                 {result.suggestions.map((s, i) => (
                                     <div key={i} className={`an-${Math.min(i + 5, 6) as 5 | 6}`}>
                                         <SuggestionCard suggestion={s} index={i} />
@@ -277,18 +252,10 @@ export default function AnalyzePage() {
                         </div>
 
                         {/* Footer actions */}
-                        <div className="an-6" style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 12, flexWrap: "wrap" }}>
+                        <div className="an-6 flex gap-2.5 justify-center mt-3 flex-wrap">
                             <Link
                                 href="/upload"
-                                style={{
-                                    display: "inline-flex", alignItems: "center", gap: 6,
-                                    padding: "10px 20px", borderRadius: 10,
-                                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                                    color: "#7c7a92", fontSize: 13, fontWeight: 500,
-                                    textDecoration: "none", transition: "all 0.2s ease",
-                                }}
-                                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "#c4c2d4"; }}
-                                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.color = "#7c7a92"; }}
+                                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-[10px] bg-white/4 border border-white/8 text-[#7c7a92] text-[13px] font-medium no-underline transition-all duration-200 hover:bg-white/8 hover:text-[#c4c2d4]"
                             >
                                 Analyse another resume
                             </Link>

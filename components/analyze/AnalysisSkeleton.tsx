@@ -1,11 +1,15 @@
 function Shimmer({ width = "100%", height = 16, radius = 6 }: { width?: string | number; height?: number; radius?: number }) {
     return (
-        <div style={{
-            width, height, borderRadius: radius,
-            background: "linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%)",
-            backgroundSize: "200% 100%",
-            animation: "shimmer 1.6s ease-in-out infinite",
-        }} />
+        <div
+            className="animate-shimmer"
+            style={{
+                width,
+                height,
+                borderRadius: radius,
+                background: "linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 100%)",
+                backgroundSize: "200% 100%",
+            }}
+        />
     );
 }
 
@@ -17,18 +21,15 @@ export default function AnalysisSkeleton() {
           0%   { background-position: -200% center; }
           100% { background-position:  200% center; }
         }
+        .animate-shimmer {
+          animation: shimmer 1.6s ease-in-out infinite;
+        }
       `}</style>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 20, width: "100%", maxWidth: 860 }}>
-                {/* Score placeholder */}
-                <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}>
-                    <div style={{
-                        width: 144, height: 144, borderRadius: "50%",
-                        background: "rgba(255,255,255,0.04)",
-                        border: "1px solid rgba(255,255,255,0.06)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+            <div className="flex flex-col gap-5 w-full max-w-215">
+                <div className="flex justify-center py-6">
+                    <div className="w-36 h-36 rounded-full bg-white/4 border border-white/6 flex items-center justify-center">
+                        <div className="flex flex-col items-center gap-1.5">
                             <Shimmer width={48} height={36} radius={6} />
                             <Shimmer width={60} height={10} radius={4} />
                         </div>
@@ -36,16 +37,16 @@ export default function AnalysisSkeleton() {
                 </div>
 
                 {/* Summary */}
-                <div style={{ padding: "16px", borderRadius: 14, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", display: "flex", flexDirection: "column", gap: 8 }}>
+                <div className="p-4 rounded-xl border border-white/6 bg-white/2 flex flex-col gap-2">
                     <Shimmer width="90%" />
                     <Shimmer width="75%" />
                     <Shimmer width="60%" />
                 </div>
 
                 {/* Strengths + Weaknesses */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[0, 1].map(i => (
-                        <div key={i} style={{ padding: "16px", borderRadius: 14, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", display: "flex", flexDirection: "column", gap: 10 }}>
+                        <div key={i} className="p-4 rounded-xl border border-white/6 bg-white/2 flex flex-col gap-2.5">
                             <Shimmer width={80} height={12} />
                             {[0, 1, 2, 3].map(j => <Shimmer key={j} width={`${85 - j * 8}%`} />)}
                         </div>
@@ -53,16 +54,18 @@ export default function AnalysisSkeleton() {
                 </div>
 
                 {/* Skills */}
-                <div style={{ padding: "16px", borderRadius: 14, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+                <div className="p-4 rounded-xl border border-white/6 bg-white/2">
                     <Shimmer width={120} height={12} />
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
-                        {[80, 90, 70, 110, 85, 95].map((w, i) => <Shimmer key={i} width={w} height={28} radius={999} />)}
+                    <div className="flex flex-wrap gap-2 mt-3">
+                        {[80, 90, 70, 110, 85, 95].map((w, i) => (
+                            <Shimmer key={i} width={w} height={28} radius={999} />
+                        ))}
                     </div>
                 </div>
 
                 {/* Suggestions */}
                 {[0, 1, 2].map(i => (
-                    <div key={i} style={{ padding: "16px", borderRadius: 14, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", display: "flex", flexDirection: "column", gap: 10 }}>
+                    <div key={i} className="p-4 rounded-xl border border-white/6 bg-white/2 flex flex-col gap-2.5">
                         <Shimmer width="70%" />
                         <Shimmer width="85%" height={40} radius={8} />
                         <Shimmer width="85%" height={40} radius={8} />

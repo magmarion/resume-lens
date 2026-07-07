@@ -17,53 +17,80 @@ export default function ScoreGauge({ score, atsSafe }: ScoreGaugeProps) {
     const { stroke, glow, label } = scoreColor(score);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-            <div style={{ position: "relative", width: 144, height: 144 }}>
-                <svg width="144" height="144" viewBox="0 0 144 144" style={{ transform: "rotate(-90deg)" }}>
-                    <circle cx="72" cy="72" r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" />
+        <div className="flex flex-col items-center gap-4">
+            <div className="relative w-36 h-36">
+                <svg
+                    width="144"
+                    height="144"
+                    viewBox="0 0 144 144"
+                    className="-rotate-90"
+                >
                     <circle
-                        cx="72" cy="72" r={radius}
+                        cx="72"
+                        cy="72"
+                        r={radius}
+                        fill="none"
+                        stroke="rgba(255,255,255,0.06)"
+                        strokeWidth="10"
+                    />
+                    <circle
+                        cx="72"
+                        cy="72"
+                        r={radius}
                         fill="none"
                         stroke={stroke}
                         strokeWidth="10"
                         strokeLinecap="round"
                         strokeDasharray={`${dash} ${circ}`}
+                        className="transition-[stroke-dasharray] duration-[1.2s] ease-[cubic-bezier(0.22,1,0.36,1)]"
                         style={{
                             filter: `drop-shadow(0 0 8px ${glow})`,
-                            transition: "stroke-dasharray 1.2s cubic-bezier(0.22,1,0.36,1)",
                         }}
                     />
                 </svg>
-                <div style={{
-                    position: "absolute", inset: 0,
-                    display: "flex", flexDirection: "column",
-                    alignItems: "center", justifyContent: "center",
-                }}>
-                    <span style={{ fontSize: 36, fontWeight: 800, color: "#e8e5f5", letterSpacing: "-0.04em", lineHeight: 1 }}>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="text-[36px] font-extrabold text-[#e8e5f5] tracking-[-0.04em] leading-none">
                         {score}
                     </span>
-                    <span style={{ fontSize: 11, color: stroke, fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase", marginTop: 3 }}>
+                    <span
+                        className="text-[11px] font-semibold tracking-[0.04em] uppercase mt-0.75"
+                        style={{ color: stroke }}
+                    >
                         {label}
                     </span>
                 </div>
             </div>
 
-            <div style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                padding: "5px 12px", borderRadius: 999,
-                background: atsSafe ? "rgba(52,211,153,0.10)" : "rgba(251,113,133,0.10)",
-                border: `1px solid ${atsSafe ? "rgba(52,211,153,0.25)" : "rgba(251,113,133,0.25)"}`,
-            }}>
+            <div
+                className={`inline-flex items-center gap-1.5 px-3 py-1.25 rounded-full border ${atsSafe
+                        ? "bg-emerald-400/10 border-emerald-400/25"
+                        : "bg-rose-400/10 border-rose-400/25"
+                    }`}
+            >
                 {atsSafe ? (
                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
-                        <path d="M2 5.5L4.5 8L9 3" stroke="#34d399" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                        <path
+                            d="M2 5.5L4.5 8L9 3"
+                            stroke="#34d399"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
                     </svg>
                 ) : (
                     <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
-                        <path d="M2.5 2.5L8.5 8.5M8.5 2.5L2.5 8.5" stroke="#fb7185" strokeWidth="1.4" strokeLinecap="round" />
+                        <path
+                            d="M2.5 2.5L8.5 8.5M8.5 2.5L2.5 8.5"
+                            stroke="#fb7185"
+                            strokeWidth="1.4"
+                            strokeLinecap="round"
+                        />
                     </svg>
                 )}
-                <span style={{ fontSize: 11, fontWeight: 600, color: atsSafe ? "#34d399" : "#fb7185" }}>
+                <span
+                    className={`text-[11px] font-semibold ${atsSafe ? "text-emerald-400" : "text-rose-400"
+                        }`}
+                >
                     {atsSafe ? "ATS Safe" : "ATS Issues"}
                 </span>
             </div>
