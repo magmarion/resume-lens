@@ -12,6 +12,7 @@ const NAV_LINKS = [
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
         const fn = () => setScrolled(window.scrollY > 10);
@@ -21,66 +22,89 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-100 h-14.5 flex items-center transition-[background,border-color] duration-300 ease-[ease] ${scrolled
-                    ? "bg-[rgba(6,5,10,0.80)] backdrop-blur-[20px] saturate-[1.4] border-b border-white/7"
-                    : "bg-transparent backdrop-blur-none border-b border-transparent"
+            className={`fixed inset-x-0 top-0 z-100 flex h-14.5 items-center transition-all duration-300 ${scrolled ? "bg-ink-950/80 backdrop-blur-xl backdrop-saturate-150 border-b border-white/7" : "bg-transparent border-b border-transparent"
                 }`}
         >
-            <div className="max-w-280 mx-auto px-6 w-full flex items-center justify-between">
-                {/* Logo → home */}
-                <Link href="/" className="flex items-center gap-2 no-underline">
-                    <div className="size-7 rounded-lg bg-linear-to-br from-[#6349e4] to-[#a78bfa] flex items-center justify-center shadow-[0_0_14px_rgba(99,73,228,0.45)]">
+            <div className="mx-auto flex w-full max-w-280 items-center justify-between px-6">
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-2">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-brand-600 to-brand-400 shadow-[0_0_14px_rgba(99,73,228,0.45)]">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path
-                                d="M4 10.5L7 3.5L10 10.5"
-                                stroke="white"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                            <path
-                                d="M5 8.5H9"
-                                stroke="white"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                            />
+                            <path d="M4 10.5L7 3.5L10 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M5 8.5H9" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                         </svg>
                     </div>
-                    <span className="text-[#f1f0f5] font-[650] text-[15px] tracking-[-0.03em]">
-                        ResumeAI
-                    </span>
+                    <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
                 </Link>
 
-                {/* Center links */}
-                <div className="flex gap-7 items-center">
+                {/* Desktop links */}
+                <div className="hidden items-center gap-7 md:flex">
                     {NAV_LINKS.map((l) => (
-                        <Link
-                            key={l.label}
-                            href={l.href}
-                            className="text-[13.5px] font-[450] text-[#7c7a92] no-underline tracking-[-0.01em] transition-colors duration-150 hover:text-[#d4d2e8]"
-                        >
+                        <Link key={l.label} href={l.href} className="text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400">
                             {l.label}
                         </Link>
                     ))}
                 </div>
 
-                {/* Right: sign in + CTA */}
-                <div className="flex items-center gap-2.5">
-                    <Link
-                        href="/sign-in"
-                        className="text-[13.5px] font-[450] text-[#7c7a92] no-underline tracking-[-0.01em] transition-colors duration-150 hover:text-[#d4d2e8]"
-                    >
+                {/* Desktop right */}
+                <div className="hidden items-center gap-2.5 md:flex">
+                    <Link href="/sign-in" className="text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400">
                         Sign in
                     </Link>
-
                     <Link
                         href="/upload"
-                        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[9px] bg-linear-to-br from-[#6349e4] to-[#818cf8] text-white text-[13px] font-semibold tracking-[-0.01em] no-underline shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-[opacity,transform] duration-200 ease-[ease] hover:opacity-[0.88] hover:translate-y-px"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90"
                     >
                         Try free
                     </Link>
                 </div>
+
+                {/* Mobile menu button */}
+                <button
+                    className="flex items-center justify-center rounded-lg p-2 text-mist-400 md:hidden"
+                    onClick={() => setMobileOpen((v) => !v)}
+                    aria-label="Toggle menu"
+                >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        {mobileOpen ? (
+                            <path d="M5 5L15 15M15 5L5 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                        ) : (
+                            <path d="M3 6H17M3 10H17M3 14H17" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                        )}
+                    </svg>
+                </button>
             </div>
+
+            {/* Mobile dropdown */}
+            {mobileOpen && (
+                <div className="absolute inset-x-0 top-14.5 flex flex-col gap-1 border-b border-white/7 bg-ink-950/95 p-4 backdrop-blur-xl md:hidden">
+                    {NAV_LINKS.map((l) => (
+                        <Link
+                            key={l.label}
+                            href={l.href}
+                            onClick={() => setMobileOpen(false)}
+                            className="rounded-lg px-3 py-2.5 text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300"
+                        >
+                            {l.label}
+                        </Link>
+                    ))}
+                    <div className="my-2 h-px bg-white/6" />
+                    <Link
+                        href="/sign-in"
+                        onClick={() => setMobileOpen(false)}
+                        className="rounded-lg px-3 py-2.5 text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300"
+                    >
+                        Sign in
+                    </Link>
+                    <Link
+                        href="/upload"
+                        onClick={() => setMobileOpen(false)}
+                        className="mt-1 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-3 py-2.5 text-center text-sm font-semibold text-white"
+                    >
+                        Try free
+                    </Link>
+                </div>
+            )}
         </nav>
     );
 }
