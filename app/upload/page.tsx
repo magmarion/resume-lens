@@ -7,111 +7,61 @@ import { HeroBackground } from "@/components/home/HeroBackground";
 export default function UploadPage() {
     return (
         <>
-            {/* Custom animations - these need to stay in a style tag */}
-            <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(22px); }
-          to   { opacity: 1; transform: translateY(0);    }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .u-anim-1, .u-anim-2, .u-anim-3 {
-            animation: none !important;
-            opacity: 1 !important;
-            transform: none !important;
-          }
-        }
-
-        .u-anim-1 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0ms   both; }
-        .u-anim-2 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 90ms  both; }
-        .u-anim-3 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 170ms both; }
-      `}</style>
-
-            {/* Same canvas orbs as Hero */}
             <HeroBackground />
+            <div aria-hidden="true" className="bg-vignette fixed inset-0 z-1 pointer-events-none" />
 
-            {/* Same vignette as Hero — identical values */}
-            <div
-                aria-hidden="true"
-                className="fixed inset-0 z-1 pointer-events-none"
-                style={{
-                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06090a 72%)",
-                }}
-            />
-
-            <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-15 pt-22.5 pb-15">
-                {/* Back link — sits below the 58px fixed Navbar */}
-                <div className="u-anim-1 absolute top-18 left-8">
-                    <Link
-                        href="/"
-                        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#52506a] no-underline transition-colors duration-150 cursor-pointer hover:text-[#c4b5fd]"
-                    >
+            <main className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 pb-16 pt-24 sm:pt-22.5">
+                {/* Back link */}
+                <div className="anim-1 absolute left-5 top-16 sm:left-8 sm:top-18">
+                    <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-mist-800 transition-colors hover:text-brand-400">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path
-                                d="M9 2L4 7L9 12"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
+                            <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                         Back to home
                     </Link>
                 </div>
 
                 {/* Step badge */}
-                <div className="u-anim-1 inline-flex items-center gap-1.5 px-3 py-1.25 rounded-full mb-7 bg-violet-600/10 border border-violet-600/22">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#a78bfa] shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
-                    <span className="text-[11px] font-semibold text-[#a78bfa] tracking-wider uppercase">
-                        Step 1 of 3
-                    </span>
-                    <span className="w-px h-2.5 bg-violet-400/30" />
-                    <span className="text-[11px] font-medium text-[#7c7a92]">Upload Resume</span>
+                <div className="anim-1 badge-pill mb-6 border-brand-600/22 bg-brand-600/10 sm:mb-7">
+                    <div className="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 1 of 3</span>
+                    <span className="h-2.5 w-px bg-brand-400/30" />
+                    <span className="text-[11px] font-medium text-mist-600">Upload Resume</span>
                 </div>
 
                 {/* Heading */}
-                <div className="text-center mb-10 max-w-140">
-                    <h1 className="u-anim-2 text-[clamp(32px,5vw,52px)] font-extrabold leading-[1.06] tracking-[-0.04em] mb-4 bg-linear-to-b from-white via-white to-[rgba(196,181,253,0.75)] bg-clip-text text-transparent">
+                <div className="mb-9 max-w-140 text-center sm:mb-10">
+                    <h1 className="anim-2 text-gradient-brand mb-3.5 text-[clamp(28px,6vw,52px)] font-extrabold leading-[1.08] tracking-[-0.04em]">
                         Upload your resume
                     </h1>
-                    <p className="u-anim-3 text-[clamp(14px,1.8vw,17px)] text-[#7c7a92] leading-[1.7] tracking-[-0.01em]">
+                    <p className="anim-3 text-[clamp(13.5px,2vw,17px)] leading-[1.7] tracking-tight text-mist-600">
                         We&apos;ll extract the text and run it through our AI reviewer.
-                        <br />
+                        <br className="hidden sm:block" />
                         Your file is never stored — only the text is analysed.
                     </p>
                 </div>
 
                 {/* Upload box */}
-                <div className="u-anim-3 w-full max-w-130">
+                <div className="anim-3 w-full max-w-130">
                     <UploadBox />
                 </div>
 
                 {/* Step progress strip */}
-                <div className="u-anim-3 flex items-center gap-2 mt-10 flex-wrap justify-center">
+                <div className="anim-3 mt-9 flex flex-wrap items-center justify-center gap-2 sm:mt-10">
                     {[
-                        { step: "1", label: "Upload PDF", active: true },
-                        { step: "2", label: "AI Analysis", active: false },
+                        { step: "1", label: "Upload", active: true },
+                        { step: "2", label: "Review", active: false },
+                        { step: "3", label: "Analyse", active: false },
                     ].map((item, i) => (
                         <div key={item.step} className="flex items-center gap-2">
-                            {i > 0 && <div className="w-6 h-px bg-white/8" />}
-                            <div
-                                className={`flex items-center gap-1.75 px-3 py-1.5 rounded-full border ${item.active
-                                        ? "bg-violet-600/12 border-violet-600/25"
-                                        : "bg-transparent border-white/6"
-                                    }`}
-                            >
-                                <div
-                                    className={`w-4.5 h-4.5 rounded-full flex items-center justify-center text-[10px] font-bold ${item.active
-                                            ? "bg-violet-400/25 text-[#c4b5fd]"
-                                            : "bg-white/5 text-[#3d3b52]"
-                                        }`}
-                                >
+                            {i > 0 && <div className="h-px w-5 bg-white/8 sm:w-6" />}
+                            <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 sm:gap-1.75 sm:px-3 ${item.active ? "border-brand-600/25 bg-brand-600/12" : "border-white/6 bg-transparent"
+                                }`}>
+                                <div className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[10px] font-bold ${item.active ? "bg-brand-400/25 text-brand-400" : "bg-white/5 text-mist-950"
+                                    }`}>
                                     {item.step}
                                 </div>
-                                <span
-                                    className={`text-[12px] font-medium tracking-[-0.01em] ${item.active ? "text-[#c4b5fd]" : "text-[#3d3b52]"
-                                        }`}
-                                >
+                                <span className={`text-xs font-medium tracking-tight ${item.active ? "text-brand-400" : "text-mist-950"}`}>
                                     {item.label}
                                 </span>
                             </div>
