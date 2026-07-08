@@ -1,8 +1,8 @@
-# Resume AI Reviewer
+# Resume Lens
 
 An AI powered resume analysis platform designed to help job seekers create stronger, more competitive resumes through instant, personalized feedback.
 
-Resume AI Reviewer analyzes your resume for clarity, structure, ATS compatibility, and overall effectiveness, providing actionable recommendations that help increase your chances of landing interviews.
+Resume Lens analyzes your resume for clarity, structure, ATS compatibility, and overall effectiveness, providing actionable recommendations that help increase your chances of landing interviews.
 
 ---
 
@@ -30,7 +30,7 @@ Resume AI Reviewer analyzes your resume for clarity, structure, ATS compatibilit
 
 ## Technology
 
-Resume AI Reviewer is built using modern web technologies to provide a fast, reliable, and seamless experience.
+Resume Lens is built using modern web technologies to provide a fast, reliable, and seamless experience.
 
 **Frontend**
 
@@ -51,13 +51,13 @@ Resume AI Reviewer is built using modern web technologies to provide a fast, rel
 
 ## Mission
 
-Finding a job is challenging enough without having to guess whether your resume is effective. Resume AI Reviewer aims to make professional resume feedback accessible to everyone by delivering fast, intelligent, and practical insights that help candidates present their experience with confidence.
+Finding a job is challenging enough without having to guess whether your resume is effective. Resume Lens aims to make professional resume feedback accessible to everyone by delivering fast, intelligent, and practical insights that help candidates present their experience with confidence.
 
 ---
 
 ## Contributing
 
-Contributions, feature suggestions, and bug reports are always welcome. If you have ideas for improving Resume AI Reviewer, feel free to open an issue or submit a pull request.
+Contributions, feature suggestions, and bug reports are always welcome. If you have ideas for improving Resume Lens, feel free to open an issue or submit a pull request.
 
 ---
 
