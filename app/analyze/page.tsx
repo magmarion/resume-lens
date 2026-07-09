@@ -38,22 +38,31 @@ export default function AnalyzePage() {
     const [status, setStatus] = useState<Status>("loading");
     const [errorMsg, setErrorMsg] = useState("");
 
+    // Bumping this re-runs the effect below without duplicating fetch logic —
+    // used by the "Try again" button on error.
+    const [retryKey, setRetryKey] = useState(0);
+
     useEffect(() => {
         if (!resumeData) {
             router.replace("/upload");
             return;
         }
 
+        let cancelled = false;
+
         async function runAnalysis() {
-            if (!resumeData) return;
+            setStatus("loading");
+            setErrorMsg("");
+
             try {
                 const res = await fetch("/api/analyze", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: resumeData.text, fileName: resumeData.fileName }),
+                    body: JSON.stringify({ text: resumeData!.text, fileName: resumeData!.fileName }),
                 });
-
                 const data = (await res.json()) as AnalysisResult & { error?: string };
+
+                if (cancelled) return;
 
                 if (!res.ok || data.error) {
                     setErrorMsg(data.error ?? "Something went wrong. Please try again.");
@@ -64,198 +73,122 @@ export default function AnalyzePage() {
                 setResult(data);
                 setStatus("success");
             } catch {
-                setErrorMsg("Network error — please check your connection and try again.");
-                setStatus("error");
+                if (!cancelled) {
+                    setErrorMsg("Network error — please check your connection and try again.");
+                    setStatus("error");
+                }
             }
         }
 
         void runAnalysis();
-    }, [resumeData, router]);
+
+        return () => {
+            cancelled = true;
+        };
+    }, [resumeData, router, retryKey]);
 
     return (
         <>
-            {/* Custom animations - need to stay in style tag */}
-            <style>{`
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(18px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .an-1 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 0ms   both; }
-        .an-2 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 80ms  both; }
-        .an-3 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 160ms both; }
-        .an-4 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 240ms both; }
-        .an-5 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 320ms both; }
-        .an-6 { animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) 400ms both; }
-        @media (prefers-reduced-motion: reduce) {
-          .an-1,.an-2,.an-3,.an-4,.an-5,.an-6 { animation: none !important; opacity: 1 !important; }
-        }
-      `}</style>
-
             <HeroBackground />
-            <div
-                aria-hidden="true"
-                className="fixed inset-0 z-1 pointer-events-none"
-                style={{
-                    background: "radial-gradient(ellipse 80% 55% at 50% 0%, rgba(15,10,30,0) 0%, #06090a 72%)",
-                }}
-            />
+            <div aria-hidden="true" className="bg-vignette fixed inset-0 z-1 pointer-events-none" />
 
-            <main className="relative z-10 min-h-screen flex flex-col items-center px-6 pt-22.5 pb-20">
-                {/* Back link */}
-                <div className="an-1 absolute top-18 left-8">
-                    <Link
-                        href="/results"
-                        className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#52506a] no-underline transition-colors duration-150 hover:text-[#c4b5fd]"
-                    >
+            <main className="relative z-10 flex min-h-screen flex-col items-center px-4 pb-20 pt-24 sm:px-6 sm:pt-22.5">
+                {/* Back */}
+                <div className="anim-1 absolute left-5 top-16 sm:left-8 sm:top-18">
+                    <Link href="/results" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-mist-800 transition-colors hover:text-brand-400">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path
-                                d="M9 2L4 7L9 12"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
+                            <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                         Back
                     </Link>
                 </div>
 
                 {/* Header */}
-                <div className="an-1 inline-flex items-center gap-1.5 px-3 py-1.25 rounded-full mb-6 bg-violet-600/10 border border-violet-600/22">
-                    <div className="size-1.5 rounded-full bg-[#a78bfa] shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
-                    <span className="text-[11px] font-semibold text-[#a78bfa] tracking-wider uppercase">
-                        Step 3 of 3
-                    </span>
-                    <span className="w-px h-2.5 bg-violet-400/30" />
-                    <span className="text-[11px] font-medium text-[#7c7a92]">AI Analysis</span>
+                <div className="anim-1 badge-pill mb-6 border-brand-600/22 bg-brand-600/10">
+                    <div className="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 3 of 3</span>
+                    <span className="h-2.5 w-px bg-brand-400/30" />
+                    <span className="text-[11px] font-medium text-mist-600">AI Analysis</span>
                 </div>
 
-                <h1
-                    className="an-2 text-[clamp(26px,4vw,42px)] font-extrabold tracking-[-0.04em] text-center mb-2 bg-linear-to-b from-white via-white to-[rgba(196,181,253,0.75)] bg-clip-text text-transparent"
-                >
-                    {status === "loading"
-                        ? "Analysing your resume…"
-                        : status === "error"
-                            ? "Analysis failed"
-                            : "Your resume analysis"}
+                <h1 className="anim-2 text-gradient-brand mb-2 text-center text-[clamp(22px,5vw,42px)] font-extrabold tracking-[-0.04em]">
+                    {status === "loading" ? "Analysing your resume…" : status === "error" ? "Analysis failed" : "Your resume analysis"}
                 </h1>
 
                 {resumeData && (
-                    <p className="an-2 text-[14px] text-[#52506a] text-center mb-10">
+                    <p className="anim-2 mb-9 text-center text-[13px] text-mist-800 sm:mb-10 sm:text-sm">
                         {status === "loading"
-                            ? `Analysing ${resumeData.fileName} · ${resumeData.wordCount.toLocaleString()} words`
+                            ? `Reading ${resumeData.fileName} · ${resumeData.wordCount.toLocaleString()} words`
                             : resumeData.fileName}
                     </p>
                 )}
 
-                {/* ── Loading ── */}
+                {/* Loading */}
                 {status === "loading" && (
-                    <div className="an-3 w-full max-w-215">
-                        {/* Thinking indicator */}
-                        <div className="flex items-center justify-center gap-2.5 mb-9 px-5 py-3 rounded-full bg-violet-600/8 border border-violet-600/18 w-fit mx-auto">
-                            <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 14 14"
-                                fill="none"
-                                className="animate-spin shrink-0"
-                                style={{ animationDuration: "0.9s" }}
-                                aria-hidden="true"
-                            >
-                                <circle cx="7" cy="7" r="5.5" stroke="rgba(167,139,250,0.25)" strokeWidth="1.5" />
-                                <path d="M7 1.5A5.5 5.5 0 0 1 12.5 7" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" />
-                            </svg>
-                            <span className="text-[13px] text-[#9f9cb8] font-medium">
-                                Your resume is being analysed by AI. This may take a few moments depending on the length of your resume.
-                            </span>
+                    <div className="anim-3 w-full max-w-215">
+                        <div className="mx-auto mb-9 w-fit rounded-full border border-brand-600/18 bg-brand-600/8 px-5 py-3 sm:mb-9">
+                            <div className="flex items-center gap-2.5">
+                                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="shrink-0 animate-spin-slow">
+                                    <circle cx="7" cy="7" r="5.5" stroke="rgba(167,139,250,0.25)" strokeWidth="1.5" />
+                                    <path d="M7 1.5A5.5 5.5 0 0 1 12.5 7" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" />
+                                </svg>
+                                <span className="text-[13px] font-medium text-mist-500">Your resume is being analysed by our AI. This may take a few moments depending on the length of your resume.</span>
+                            </div>
                         </div>
                         <AnalysisSkeleton />
                     </div>
                 )}
 
-                {/* ── Error ── */}
+                {/* Error */}
                 {status === "error" && (
-                    <div className="an-3 max-w-120 w-full p-6 rounded-2xl bg-rose-400/6 border border-rose-400/20 text-center">
-                        <div className="text-[14px] text-rose-400 font-medium mb-2">{errorMsg}</div>
+                    <div className="anim-3 w-full max-w-120 rounded-2xl border border-danger-400/20 bg-danger-400/6 p-6 text-center">
+                        <div className="mb-2 text-sm font-medium text-danger-400">{errorMsg}</div>
                         <button
-                            onClick={() => {
-                                setStatus("loading");
-                                setErrorMsg("");
-                                void (async () => {
-                                    if (!resumeData) return;
-                                    try {
-                                        const res = await fetch("/api/analyze", {
-                                            method: "POST",
-                                            headers: { "Content-Type": "application/json" },
-                                            body: JSON.stringify({ text: resumeData.text, fileName: resumeData.fileName }),
-                                        });
-                                        const data = (await res.json()) as AnalysisResult & { error?: string };
-                                        if (!res.ok || data.error) {
-                                            setErrorMsg(data.error ?? "Error");
-                                            setStatus("error");
-                                            return;
-                                        }
-                                        setResult(data);
-                                        setStatus("success");
-                                    } catch {
-                                        setErrorMsg("Network error.");
-                                        setStatus("error");
-                                    }
-                                })();
-                            }}
-                            className="mt-4 px-5 py-2.25 rounded-[9px] bg-white/6 border border-white/12 text-[#c4c2d4] text-[13px] font-medium cursor-pointer hover:bg-white/10 transition-colors duration-200"
+                            onClick={() => setRetryKey((k) => k + 1)}
+                            className="mt-4 rounded-lg border border-white/12 bg-white/6 px-5 py-2.5 text-[13px] font-medium text-mist-400 transition-colors hover:bg-white/10"
                         >
                             Try again
                         </button>
                     </div>
                 )}
 
-                {/* ── Results ── */}
+                {/* Results */}
                 {status === "success" && result && (
-                    <div className="w-full max-w-215 flex flex-col gap-5">
+                    <div className="flex w-full max-w-215 flex-col gap-5">
                         {/* Score + Summary */}
-                        <div className="an-3 rounded-[20px] border border-white/8 bg-linear-to-br from-white/5 to-white/2 backdrop-blur-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.3),0_24px_60px_rgba(0,0,0,0.4)] p-7 sm:p-8 grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-8 items-center">
-                            <ScoreGauge score={result.score} atsSafe={result.atsSafe} />
+                        <div className="anim-3 glass-card grid grid-cols-1 items-center gap-6 p-6 sm:grid-cols-[auto_1fr] sm:gap-8 sm:p-8">
+                            <div className="flex justify-center sm:justify-start">
+                                <ScoreGauge score={result.score} atsSafe={result.atsSafe} />
+                            </div>
                             <div>
-                                <div className="text-[10px] font-semibold text-[#3d3b52] tracking-[0.08em] uppercase mb-2.5">
-                                    Summary
-                                </div>
-                                <p className="text-[15px] text-[#c4c2d4] leading-[1.7] tracking-[-0.01em] m-0">
+                                <div className="mb-2.5 text-[10px] font-semibold uppercase tracking-wider text-mist-950">Summary</div>
+                                <p className="m-0 text-[14px] leading-relaxed tracking-tight text-mist-400 sm:text-[15px]">
                                     {result.summary}
                                 </p>
                             </div>
                         </div>
 
-                        {/* Strengths + Weaknesses */}
-                        <div className="an-4">
+                        <div className="anim-4">
                             <StrengthsWeaknesses strengths={result.strengths} weaknesses={result.weaknesses} />
                         </div>
 
-                        {/* Missing skills */}
-                        <div className="an-4">
+                        <div className="anim-4">
                             <MissingSkills skills={result.missingSkills} />
                         </div>
 
-                        {/* Suggestions header */}
-                        <div className="an-5 mt-2">
-                            <div className="text-[10px] font-semibold text-[#3d3b52] tracking-[0.08em] uppercase mb-3.5">
-                                AI Bullet Rewrites
-                            </div>
+                        <div className="anim-5 mt-2">
+                            <div className="mb-3.5 text-[10px] font-semibold uppercase tracking-wider text-mist-950">AI Bullet Rewrites</div>
                             <div className="flex flex-col gap-3.5">
                                 {result.suggestions.map((s, i) => (
-                                    <div key={i} className={`an-${Math.min(i + 5, 6) as 5 | 6}`}>
-                                        <SuggestionCard suggestion={s} index={i} />
-                                    </div>
+                                    <SuggestionCard key={i} suggestion={s} index={i} />
                                 ))}
                             </div>
                         </div>
 
-                        {/* Footer actions */}
-                        <div className="an-6 flex gap-2.5 justify-center mt-3 flex-wrap">
+                        <div className="anim-6 mt-3 flex flex-wrap justify-center gap-2.5">
                             <Link
                                 href="/upload"
-                                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-[10px] bg-white/4 border border-white/8 text-[#7c7a92] text-[13px] font-medium no-underline transition-all duration-200 hover:bg-white/8 hover:text-[#c4c2d4]"
+                                className="inline-flex items-center gap-1.5 rounded-[10px] border border-white/8 bg-white/4 px-5 py-2.5 text-[13px] font-medium text-mist-600 transition-colors hover:bg-white/8 hover:text-mist-400"
                             >
                                 Analyse another resume
                             </Link>
