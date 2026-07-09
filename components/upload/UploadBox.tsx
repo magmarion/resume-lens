@@ -17,8 +17,8 @@ function UploadIcon({ dragging }: { dragging: boolean }) {
     return (
         <div
             className={`w-16 h-16 rounded-[18px] flex items-center justify-center mb-5 transition-all duration-250 border ${dragging
-                    ? "bg-violet-600/20 border-violet-400/40"
-                    : "bg-white/4 border-white/8"
+                ? "bg-violet-600/20 border-violet-400/40"
+                : "bg-white/4 border-white/8"
                 }`}
         >
             <svg
@@ -52,7 +52,7 @@ function TipRow({ icon, text }: { icon: string; text: string }) {
     return (
         <div className="flex items-center gap-1.5">
             <span className="text-[12px]">{icon}</span>
-            <span className="text-[12px] text-[#52506a]">{text}</span>
+            <span className="text-[12px] text-mist-800">{text}</span>
         </div>
     );
 }
@@ -141,7 +141,6 @@ export default function UploadBox() {
         setStage("redirecting");
         await new Promise(r => setTimeout(r, 600));
 
-        // ← Goes to /results, not /analyze
         router.push("/results");
     }, [router]);
 
@@ -218,12 +217,12 @@ export default function UploadBox() {
                     <UploadIcon dragging={dragging} />
 
                     <div className="text-center mb-6">
-                        <p className="text-[17px] font-semibold text-[#e8e5f5] tracking-[-0.02em] mb-1.5">
+                        <p className="text-[17px] font-semibold text-mist-300 tracking-[-0.02em] mb-1.5">
                             {dragging ? "Drop it here" : "Drop your resume here"}
                         </p>
-                        <p className="text-[13px] text-[#52506a] leading-[1.6]">
+                        <p className="text-[13px] text-mist-800 leading-[1.6]">
                             or{" "}
-                            <span className="text-[#a78bfa] font-medium underline underline-offset-[3px]">
+                            <span className="text-brand-400 font-medium underline underline-offset-[3px]">
                                 click to browse
                             </span>{" "}
                             your files
@@ -252,7 +251,7 @@ export default function UploadBox() {
                         <div className="flex justify-center mt-5">
                             <button
                                 onClick={e => { e.stopPropagation(); resetToIdle(); }}
-                                className="inline-flex items-center gap-1.5 px-5 py-2.25 rounded-[9px] bg-white/6 border border-white/12 text-[#c4c2d4] text-[13px] font-medium cursor-pointer transition-colors duration-200 hover:bg-white/10"
+                                className="inline-flex items-center gap-1.5 px-5 py-2.25 rounded-[9px] bg-white/6 border border-white/12 text-mist-400 text-[13px] font-medium cursor-pointer transition-colors duration-200 hover:bg-white/10"
                             >
                                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
                                     <path
