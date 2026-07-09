@@ -9,6 +9,7 @@ import StrengthsWeaknesses from "@/components/analyze/StrengthsWeaknesses";
 import MissingSkills from "@/components/analyze/MissingSkills";
 import SuggestionCard from "@/components/analyze/SuggestionCard";
 import AnalysisSkeleton from "@/components/analyze/AnalysisSkeleton";
+import JobMatchCard from "@/components/analyze/JobMatchCard";
 import type { AnalysisResult } from "@/types/analysis";
 
 interface ResumeData {
@@ -29,17 +30,20 @@ function readResumeData(): ResumeData | null {
     }
 }
 
+function readJobDescription(): string {
+    if (typeof window === "undefined") return "";
+    return sessionStorage.getItem("jobDescription") ?? "";
+}
+
 type Status = "loading" | "success" | "error";
 
 export default function AnalyzePage() {
     const router = useRouter();
     const [resumeData] = useState<ResumeData | null>(readResumeData);
+    const [jobDescription] = useState<string>(readJobDescription);
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [status, setStatus] = useState<Status>("loading");
     const [errorMsg, setErrorMsg] = useState("");
-
-    // Bumping this re-runs the effect below without duplicating fetch logic —
-    // used by the "Try again" button on error.
     const [retryKey, setRetryKey] = useState(0);
 
     useEffect(() => {
@@ -58,7 +62,11 @@ export default function AnalyzePage() {
                 const res = await fetch("/api/analyze", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ text: resumeData!.text, fileName: resumeData!.fileName }),
+                    body: JSON.stringify({
+                        text: resumeData!.text,
+                        fileName: resumeData!.fileName,
+                        jobDescription: jobDescription || undefined,
+                    }),
                 });
                 const data = (await res.json()) as AnalysisResult & { error?: string };
 
@@ -85,7 +93,9 @@ export default function AnalyzePage() {
         return () => {
             cancelled = true;
         };
-    }, [resumeData, router, retryKey]);
+    }, [resumeData, jobDescription, router, retryKey]);
+
+    const hasJd = Boolean(jobDescription);
 
     return (
         <>
@@ -106,7 +116,7 @@ export default function AnalyzePage() {
                 {/* Header */}
                 <div className="anim-1 badge-pill mb-6 border-brand-600/22 bg-brand-600/10">
                     <div className="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 3 of 3</span>
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 4 of 4</span>
                     <span className="h-2.5 w-px bg-brand-400/30" />
                     <span className="text-[11px] font-medium text-mist-600">AI Analysis</span>
                 </div>
@@ -167,6 +177,13 @@ export default function AnalyzePage() {
                                 </p>
                             </div>
                         </div>
+
+                        {/* Job match — only rendered when a JD was provided and returned */}
+                        {hasJd && result.jdMatch && (
+                            <div className="anim-3">
+                                <JobMatchCard jdMatch={result.jdMatch} />
+                            </div>
+                        )}
 
                         <div className="anim-4">
                             <StrengthsWeaknesses strengths={result.strengths} weaknesses={result.weaknesses} />
