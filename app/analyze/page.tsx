@@ -10,6 +10,7 @@ import MissingSkills from "@/components/analyze/MissingSkills";
 import SuggestionCard from "@/components/analyze/SuggestionCard";
 import AnalysisSkeleton from "@/components/analyze/AnalysisSkeleton";
 import JobMatchCard from "@/components/analyze/JobMatchCard";
+import ExportButton from "@/components/analyze/ExportButton";
 import type { AnalysisResult } from "@/types/analysis";
 
 interface ResumeData {
@@ -103,7 +104,6 @@ export default function AnalyzePage() {
             <div aria-hidden="true" className="bg-vignette fixed inset-0 z-1 pointer-events-none" />
 
             <main className="relative z-10 flex min-h-screen flex-col items-center px-4 pb-20 pt-24 sm:px-6 sm:pt-22.5">
-                {/* Back */}
                 <div className="anim-1 absolute left-5 top-16 sm:left-8 sm:top-18">
                     <Link href="/results" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-mist-800 transition-colors hover:text-brand-400">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -165,7 +165,6 @@ export default function AnalyzePage() {
                 {/* Results */}
                 {status === "success" && result && (
                     <div className="flex w-full max-w-215 flex-col gap-5">
-                        {/* Score + Summary */}
                         <div className="anim-3 glass-card grid grid-cols-1 items-center gap-6 p-6 sm:grid-cols-[auto_1fr] sm:gap-8 sm:p-8">
                             <div className="flex justify-center sm:justify-start">
                                 <ScoreGauge score={result.score} atsSafe={result.atsSafe} />
@@ -178,7 +177,7 @@ export default function AnalyzePage() {
                             </div>
                         </div>
 
-                        {/* Job match — only rendered when a JD was provided and returned */}
+                        {/* only rendered when a JD was provided and returned */}
                         {hasJd && result.jdMatch && (
                             <div className="anim-3">
                                 <JobMatchCard jdMatch={result.jdMatch} />
@@ -203,6 +202,7 @@ export default function AnalyzePage() {
                         </div>
 
                         <div className="anim-6 mt-3 flex flex-wrap justify-center gap-2.5">
+                            <ExportButton result={result} fileName={resumeData?.fileName ?? "resume"} />
                             <Link
                                 href="/upload"
                                 className="inline-flex items-center gap-1.5 rounded-[10px] border border-white/8 bg-white/4 px-5 py-2.5 text-[13px] font-medium text-mist-600 transition-colors hover:bg-white/8 hover:text-mist-400"
