@@ -13,15 +13,16 @@ interface ResumeData {
     uploadedAt: string;
 }
 
-function readSessionData(): { resume: ResumeData | null; pdfUrl: string | null } {
-    if (typeof window === "undefined") return { resume: null, pdfUrl: null };
+function readSessionData(): { resume: ResumeData | null; pdfUrl: string | null; jobDescription: string | null } {
+    if (typeof window === "undefined") return { resume: null, pdfUrl: null, jobDescription: null };
     try {
         const raw = sessionStorage.getItem("resumeData");
         const pdfUrl = sessionStorage.getItem("resumePdfDataUrl");
-        if (!raw) return { resume: null, pdfUrl: null };
-        return { resume: JSON.parse(raw) as ResumeData, pdfUrl };
+        const jobDescription = sessionStorage.getItem("jobDescription");
+        if (!raw) return { resume: null, pdfUrl: null, jobDescription: null };
+        return { resume: JSON.parse(raw) as ResumeData, pdfUrl, jobDescription };
     } catch {
-        return { resume: null, pdfUrl: null };
+        return { resume: null, pdfUrl: null, jobDescription: null };
     }
 }
 
@@ -42,11 +43,12 @@ function RedirectToUpload() {
 }
 
 export default function ResultsPage() {
-    const [{ resume, pdfUrl }] = useState(readSessionData);
+    const [{ resume, pdfUrl, jobDescription }] = useState(readSessionData);
 
     if (!resume) return <RedirectToUpload />;
 
     const uploadTime = new Date(resume.uploadedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    const hasJd = Boolean(jobDescription && jobDescription.trim());
 
     return (
         <>
@@ -54,9 +56,9 @@ export default function ResultsPage() {
             <div aria-hidden="true" className="bg-vignette fixed inset-0 z-1 pointer-events-none" />
 
             <main className="relative z-10 flex min-h-screen flex-col items-center px-4 pb-16 pt-24 sm:px-6 sm:pt-22.5">
-                {/* Back */}
+                {/* Back — now points to job-description, not upload */}
                 <div className="anim-1 absolute left-5 top-16 sm:left-8 sm:top-18">
-                    <Link href="/upload" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-mist-800 transition-colors hover:text-brand-400">
+                    <Link href="/job-description" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-mist-800 transition-colors hover:text-brand-400">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                             <path d="M9 2L4 7L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
@@ -67,7 +69,7 @@ export default function ResultsPage() {
                 {/* Badge */}
                 <div className="anim-1 badge-pill mb-6 border-brand-600/22 bg-brand-600/10">
                     <div className="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 2 of 3</span>
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 3 of 4</span>
                     <span className="h-2.5 w-px bg-brand-400/30" />
                     <span className="text-[11px] font-medium text-mist-600">Review &amp; Confirm</span>
                 </div>
@@ -135,13 +137,39 @@ export default function ResultsPage() {
                                     <div className="text-[11px] text-mist-800">{resume.text.length.toLocaleString()} characters</div>
                                 </div>
                             </div>
+
+                            {/* JD indicator — only shown when one was provided */}
+                            <div className={`flex items-center gap-2 border-t border-white/5 px-4 py-3 ${hasJd ? "" : "opacity-60"}`}>
+                                <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${hasJd ? "border-brand-400/25 bg-brand-600/12" : "border-white/8 bg-white/4"
+                                    }`}>
+                                    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
+                                        <rect x="1.5" y="1" width="8" height="9" rx="1" stroke={hasJd ? "#a78bfa" : "#52506a"} strokeWidth="1.1" />
+                                        <path d="M3.5 4H7.5M3.5 6H6" stroke={hasJd ? "#a78bfa" : "#52506a"} strokeWidth="1" strokeLinecap="round" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div className={`text-xs font-medium ${hasJd ? "text-mist-400" : "text-mist-700"}`}>
+                                        {hasJd ? "Job description added" : "No job description"}
+                                    </div>
+                                    <div className="text-[11px] text-mist-800">
+                                        {hasJd ? "We'll show a match score" : "General analysis only"}
+                                    </div>
+                                </div>
+                                {!hasJd && (
+                                    <Link href="/job-description" className="ml-auto text-[11px] font-medium text-brand-400 hover:underline">
+                                        Add
+                                    </Link>
+                                )}
+                            </div>
                         </div>
 
                         {/* Analyse CTA */}
                         <div className="rounded-2xl border border-brand-600/25 bg-brand-600/8 p-4">
                             <div className="mb-1 text-[13px] font-semibold tracking-tight text-mist-300">Ready to analyse</div>
                             <div className="mb-3.5 text-xs leading-relaxed text-mist-600">
-                                Our AI will review your resume for ATS compatibility, keyword gaps, and suggest improvements.
+                                {hasJd
+                                    ? "Our AI will review your resume for ATS compatibility, keyword gaps, and how well it matches the job you're targeting."
+                                    : "Our AI will review your resume for ATS compatibility, keyword gaps, and suggest improvements."}
                             </div>
                             <Link href="/analyze" className="btn-main w-full justify-center">
                                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">

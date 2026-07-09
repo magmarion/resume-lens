@@ -24,12 +24,11 @@ export default function UploadPage() {
                 {/* Step badge */}
                 <div className="anim-1 badge-pill mb-6 border-brand-600/22 bg-brand-600/10 sm:mb-7">
                     <div className="h-1.5 w-1.5 rounded-full bg-brand-400 shadow-[0_0_8px_rgba(167,139,250,0.9)]" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 1 of 3</span>
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-brand-400">Step 1 of 4</span>
                     <span className="h-2.5 w-px bg-brand-400/30" />
                     <span className="text-[11px] font-medium text-mist-600">Upload Resume</span>
                 </div>
 
-                {/* Heading */}
                 <div className="mb-9 max-w-140 text-center sm:mb-10">
                     <h1 className="anim-2 text-gradient-brand mb-3.5 text-[clamp(28px,6vw,52px)] font-extrabold leading-[1.08] tracking-[-0.04em]">
                         Upload your resume
@@ -41,7 +40,6 @@ export default function UploadPage() {
                     </p>
                 </div>
 
-                {/* Upload box */}
                 <div className="anim-3 w-full max-w-130">
                     <UploadBox />
                 </div>
@@ -50,12 +48,13 @@ export default function UploadPage() {
                 <div className="anim-3 mt-9 flex flex-wrap items-center justify-center gap-2 sm:mt-10">
                     {[
                         { step: "1", label: "Upload", active: true },
-                        { step: "2", label: "Review", active: false },
-                        { step: "3", label: "Analyse", active: false },
+                        { step: "2", label: "Job Desc", active: false },
+                        { step: "3", label: "Review", active: false },
+                        { step: "4", label: "Analyse", active: false },
                     ].map((item, i) => (
                         <div key={item.step} className="flex items-center gap-2">
                             {i > 0 && <div className="h-px w-5 bg-white/8 sm:w-6" />}
-                            <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 sm:gap-1.75 sm:px-3 ${item.active ? "border-brand-600/25 bg-brand-600/12" : "border-white/6 bg-transparent"
+                            <div className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1.5 sm:px-3 ${item.active ? "border-brand-600/25 bg-brand-600/12" : "border-white/6 bg-transparent"
                                 }`}>
                                 <div className={`flex h-4.5 w-4.5 items-center justify-center rounded-full text-[10px] font-bold ${item.active ? "bg-brand-400/25 text-brand-400" : "bg-white/5 text-mist-950"
                                     }`}>
