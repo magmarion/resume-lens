@@ -28,12 +28,6 @@ export default function Navbar() {
             <div className="mx-auto flex w-full max-w-280 items-center justify-between px-6">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-brand-600 to-brand-400 shadow-[0_0_14px_rgba(99,73,228,0.45)]">
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path d="M4 10.5L7 3.5L10 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M5 8.5H9" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                    </div>
                     <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
                 </Link>
 
