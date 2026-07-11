@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@clerk/nextjs";
 import { HeroBackground } from "@/components/home/HeroBackground";
 import ScoreGauge from "@/components/analyze/ScoreGauge";
 import StrengthsWeaknesses from "@/components/analyze/StrengthsWeaknesses";
@@ -40,6 +41,7 @@ type Status = "loading" | "success" | "error";
 
 export default function AnalyzePage() {
     const router = useRouter();
+    const { isSignedIn } = useAuth();
     const [resumeData] = useState<ResumeData | null>(readResumeData);
     const [jobDescription] = useState<string>(readJobDescription);
     const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -81,6 +83,23 @@ export default function AnalyzePage() {
 
                 setResult(data);
                 setStatus("success");
+
+                // Fire-and-forget save to history — only when signed in.
+                // Never blocks the UI and never surfaces errors to the user;
+                // history is a nice-to-have, not part of the core analysis flow.
+                if (isSignedIn) {
+                    fetch("/api/history", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            fileName: resumeData!.fileName,
+                            score: data.score,
+                            atsSafe: data.atsSafe,
+                        }),
+                    }).catch(() => {
+                        // Non-fatal — history saving failure shouldn't disrupt the user
+                    });
+                }
             } catch {
                 if (!cancelled) {
                     setErrorMsg("Network error — please check your connection and try again.");
@@ -94,7 +113,7 @@ export default function AnalyzePage() {
         return () => {
             cancelled = true;
         };
-    }, [resumeData, jobDescription, router, retryKey]);
+    }, [resumeData, jobDescription, router, retryKey, isSignedIn]);
 
     const hasJd = Boolean(jobDescription);
 

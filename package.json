@@ -9,12 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.5.16",
     "@react-pdf/renderer": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "groq-sdk": "^1.2.1",
     "lucide-react": "^1.21.0",
+    "mongodb": "^7.5.0",
     "next": "16.2.9",
     "pdf-extract": "^1.0.11",
     "pdf2json": "^4.0.3",

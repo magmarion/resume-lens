@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
 
 const NAV_LINKS = [
     { label: "Features", href: "/#features" },
@@ -13,6 +14,7 @@ const NAV_LINKS = [
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
+    const { isLoaded, isSignedIn } = useAuth();
 
     useEffect(() => {
         const fn = () => setScrolled(window.scrollY > 10);
@@ -29,10 +31,6 @@ export default function Navbar() {
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-brand-600 to-brand-400 shadow-[0_0_14px_rgba(99,73,228,0.45)]">
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                            <path d="M4 10.5L7 3.5L10 10.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M5 8.5H9" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
                     </div>
                     <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
                 </Link>
@@ -44,13 +42,23 @@ export default function Navbar() {
                             {l.label}
                         </Link>
                     ))}
+                    {isLoaded && isSignedIn && (
+                        <Link href="/history" className="text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400">
+                            History
+                        </Link>
+                    )}
                 </div>
 
                 {/* Desktop right */}
                 <div className="hidden items-center gap-2.5 md:flex">
-                    <Link href="/sign-in" className="text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400">
-                        Sign in
-                    </Link>
+                    {isLoaded && !isSignedIn && (
+                        <SignInButton mode="modal">
+                            <button className="text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400">
+                                Sign in
+                            </button>
+                        </SignInButton>
+                    )}
+                    {isLoaded && isSignedIn && <UserButton />}
                     <Link
                         href="/upload"
                         className="inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90"
@@ -88,14 +96,33 @@ export default function Navbar() {
                             {l.label}
                         </Link>
                     ))}
+
+                    {isLoaded && isSignedIn && (
+                        <Link
+                            href="/history"
+                            onClick={() => setMobileOpen(false)}
+                            className="rounded-lg px-3 py-2.5 text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300"
+                        >
+                            History
+                        </Link>
+                    )}
+
                     <div className="my-2 h-px bg-white/6" />
-                    <Link
-                        href="/sign-in"
-                        onClick={() => setMobileOpen(false)}
-                        className="rounded-lg px-3 py-2.5 text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300"
-                    >
-                        Sign in
-                    </Link>
+
+                    {isLoaded && !isSignedIn && (
+                        <SignInButton mode="modal">
+                            <button className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300">
+                                Sign in
+                            </button>
+                        </SignInButton>
+                    )}
+                    {isLoaded && isSignedIn && (
+                        <div className="flex items-center gap-2 px-3 py-2.5">
+                            <UserButton />
+                            <span className="text-sm text-mist-500">Account</span>
+                        </div>
+                    )}
+
                     <Link
                         href="/upload"
                         onClick={() => setMobileOpen(false)}
