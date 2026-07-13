@@ -2,29 +2,33 @@
 
 An AI powered resume analysis platform designed to help job seekers create stronger, more competitive resumes through instant, personalized feedback.
 
-Resume Lens analyzes your resume for clarity, structure, ATS compatibility, and overall effectiveness, providing actionable recommendations that help increase your chances of landing interviews.
+Resume Lens analyzes your resume for clarity, structure, ATS compatibility, and overall effectiveness — and can now match it directly against a job description — providing actionable recommendations that help increase your chances of landing interviews.
 
 ---
 
 ## Features
 
-* 🤖 AI powered resume analysis
-* 📄 Secure PDF resume uploads
-* 📊 ATS compatibility assessment
-* 📝 Detailed section by section feedback
-* ✨ Actionable suggestions for improvement
-* 🎯 Personalized recommendations tailored to your resume
-* ⚡ Instant analysis and scoring
-* 📱 Responsive, modern user experience
+🤖 AI powered resume analysis
+📄 Secure PDF resume uploads with drag & drop
+📊 ATS compatibility scoring and safety check
+📝 Detailed section-by-section feedback — strengths, weaknesses, and missing skills
+✨ AI bullet-point rewrites with side-by-side original vs. improved comparisons
+🎯 Job description matching — match score, matched/missing keywords, and targeted recommendations
+⚡ Instant analysis with structured, consistent scoring
+🔐 User accounts via Clerk, with signed-in analysis history
+📥 Export your full analysis as a downloadable PDF report
+📱 Responsive, modern, animated dark UI
 
 ---
 
 ## How It Works
 
 1. Upload your resume in PDF format.
-2. Our AI analyzes the content, formatting, and overall presentation.
-3. Receive a comprehensive review with scores, insights, and practical recommendations.
-4. Improve your resume based on the feedback before applying for your next opportunity.
+2. Optionally paste a job description you're targeting.
+3. Review the extracted text and confirm everything looks correct.
+4. Our AI analyzes the content, formatting, ATS compatibility, and (if provided) job match.
+5. Receive a comprehensive report with scores, insights, keyword gaps, and rewritten bullet points.
+6. Export the report as a PDF, or sign in to keep a history of every resume you've analyzed.
 
 ---
 
@@ -43,9 +47,13 @@ Resume Lens is built using modern web technologies to provide a fast, reliable, 
 
 **Backend**
 
-* Next.js Server Actions
+* Next.js API Routes
 * AI powered resume analysis
 * Secure file processing
+* pdf2json for resume text extraction
+* @react-pdf/renderer for PDF report generation
+* Clerk for authentication
+* MongoDB for analysis history storage
 
 ---
 
