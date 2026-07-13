@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Resume Lens",
-  description: "A modern resume builder for developers",
+  description: "A modern resume analyzer",
 };
 
 export default function RootLayout({
@@ -30,8 +30,10 @@ export default function RootLayout({
         lang="en"
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
-        <body className="min-h-full flex flex-col">{children}</body>
-        <Navbar />
+        <body className="min-h-full flex flex-col">
+          <Navbar />
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
