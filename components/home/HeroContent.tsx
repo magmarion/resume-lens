@@ -1,6 +1,9 @@
-import Link from "next/link";
+"use client";
+
 import { StatPill } from "./StatPill";
 import { BADGE_TEXT } from "./hero.constants";
+import AuthGateLink from "@/components/auth/AuthGateLink";
+import Link from "next/link";
 
 export function HeroContent() {
     return (
@@ -11,7 +14,6 @@ export function HeroContent() {
                 <span className="text-xs font-medium tracking-wide text-brand-400/90">{BADGE_TEXT}</span>
             </div>
 
-            {/* Headline */}
             <h1 className="anim-2 text-gradient-brand mb-5 text-[clamp(34px,7vw,52px)] font-extrabold leading-[1.06] tracking-[-0.04em] sm:mb-5.5">
                 Land your dream job
                 <br />
@@ -20,20 +22,18 @@ export function HeroContent() {
                 <span className="text-gradient-violet">gets past ATS.</span>
             </h1>
 
-            {/* Subtitle */}
             <p className="anim-3 mb-8 max-w-115 text-[clamp(14px,2vw,17.5px)] leading-[1.7] tracking-tight text-mist-600 sm:mb-9">
                 Upload your resume, paste a job description, and get an instant AI review —
                 keyword gaps, ATS score, bullet rewrites, and actionable fixes in seconds.
             </p>
 
-            {/* CTAs */}
             <div className="anim-4 mb-10 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:mb-11">
-                <Link href="/upload" className="btn-main justify-center sm:justify-start">
+                <AuthGateLink href="/upload" className="btn-main justify-center sm:justify-start">
                     Analyse my resume free
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                         <path d="M3 7.5H12M12 7.5L8.5 4M12 7.5L8.5 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
-                </Link>
+                </AuthGateLink>
                 <Link href="#" className="btn-ghost justify-center sm:justify-start">
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                         <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" strokeWidth="1.2" />
@@ -43,7 +43,6 @@ export function HeroContent() {
                 </Link>
             </div>
 
-            {/* Stats */}
             <div className="anim-5 flex flex-wrap justify-center gap-2.5 sm:justify-start">
                 <StatPill value="50k+" label="Resumes reviewed" />
                 <StatPill value="3×" label="More interviews" />
