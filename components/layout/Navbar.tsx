@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
+import AuthGateLink from "@/components/auth/AuthGateLink";
 
 const NAV_LINKS = [
     { label: "Features", href: "/#features" },
@@ -48,7 +49,6 @@ export default function Navbar() {
         };
     }, [mobileOpen]);
 
-    // Close on outside click
     useEffect(() => {
         if (!mobileOpen) return;
 
@@ -80,6 +80,7 @@ export default function Navbar() {
                     <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
                 </Link>
 
+                {/* Desktop links */}
                 <div className="hidden items-center gap-7 md:flex">
                     {NAV_LINKS.map((l) => (
                         <Link
@@ -115,12 +116,12 @@ export default function Navbar() {
                         </SignInButton>
                     )}
                     {isLoaded && isSignedIn && <UserButton />}
-                    <Link
+                    <AuthGateLink
                         href="/upload"
                         className="inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
                     >
                         Try free
-                    </Link>
+                    </AuthGateLink>
                 </div>
 
                 <button
@@ -188,13 +189,12 @@ export default function Navbar() {
                         </div>
                     )}
 
-                    <Link
+                    <AuthGateLink
                         href="/upload"
-                        onClick={() => setMobileOpen(false)}
                         className="mt-1 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-3 py-2.5 text-center text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
                     >
                         Try free
-                    </Link>
+                    </AuthGateLink>
                 </div>
             )}
         </nav>
