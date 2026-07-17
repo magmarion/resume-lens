@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuth, SignInButton, UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import AuthGateLink from "@/components/auth/AuthGateLink";
 
 const NAV_LINKS = [
@@ -70,6 +70,7 @@ export default function Navbar() {
                 }`}
         >
             <div className="mx-auto flex w-full max-w-280 items-center justify-between px-6">
+                {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60">
                     <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-brand-600 to-brand-400 shadow-[0_0_14px_rgba(99,73,228,0.45)]">
                         <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
@@ -107,13 +108,15 @@ export default function Navbar() {
                     )}
                 </div>
 
+                {/* Desktop right */}
                 <div className="hidden items-center gap-2.5 md:flex">
                     {isLoaded && !isSignedIn && (
-                        <SignInButton mode="modal">
-                            <button className="rounded-md text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60">
-                                Sign in
-                            </button>
-                        </SignInButton>
+                        <Link
+                            href="/sign-in"
+                            className="rounded-md text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                        >
+                            Sign in
+                        </Link>
                     )}
                     {isLoaded && isSignedIn && <UserButton />}
                     <AuthGateLink
@@ -124,6 +127,7 @@ export default function Navbar() {
                     </AuthGateLink>
                 </div>
 
+                {/* Mobile menu button */}
                 <button
                     className="flex items-center justify-center rounded-lg p-2 text-mist-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60 md:hidden"
                     onClick={() => setMobileOpen((v) => !v)}
@@ -141,6 +145,7 @@ export default function Navbar() {
                 </button>
             </div>
 
+            {/* Mobile dropdown */}
             {mobileOpen && (
                 <div
                     id="mobile-nav-menu"
@@ -176,11 +181,13 @@ export default function Navbar() {
                     <div className="my-2 h-px bg-white/6" />
 
                     {isLoaded && !isSignedIn && (
-                        <SignInButton mode="modal">
-                            <button className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60">
-                                Sign in
-                            </button>
-                        </SignInButton>
+                        <Link
+                            href="/sign-in"
+                            onClick={() => setMobileOpen(false)}
+                            className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                        >
+                            Sign in
+                        </Link>
                     )}
                     {isLoaded && isSignedIn && (
                         <div className="flex items-center gap-2 px-3 py-2.5">
