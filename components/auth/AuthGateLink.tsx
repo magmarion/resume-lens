@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth, SignInButton } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import type { ReactNode } from "react";
 
 interface AuthGateLinkProps {
@@ -30,10 +30,8 @@ export default function AuthGateLink({ href, className, children }: AuthGateLink
     }
 
     return (
-        <SignInButton mode="modal" withSignUp forceRedirectUrl={href} signUpForceRedirectUrl={href}>
-            <button type="button" className={className}>
-                {children}
-            </button>
-        </SignInButton>
+        <Link href={`/sign-in?redirect_url=${encodeURIComponent(href)}`} className={className}>
+            {children}
+        </Link>
     );
 }
