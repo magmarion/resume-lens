@@ -7,6 +7,7 @@ interface SignInPageProps {
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
     const { redirect_url } = await searchParams;
+
     const target = redirect_url && redirect_url.startsWith("/") ? redirect_url : "/upload";
 
     const signUpHref = redirect_url
@@ -20,7 +21,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
 
             <main className="relative z-10 flex min-h-screen items-center justify-center px-4 py-24">
                 <div className="anim-1 w-full max-w-md">
-                    <div className="glass-card overflow-hidden p-8">
+                    <div className="glass-card p-8">
                         <div className="mb-6 text-center">
                             <h1 className="text-gradient-brand text-2xl font-bold tracking-tight">
                                 Welcome back
