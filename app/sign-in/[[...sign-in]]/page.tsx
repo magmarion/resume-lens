@@ -1,5 +1,6 @@
 import { SignIn } from "@clerk/nextjs";
 import { HeroBackground } from "@/components/home/HeroBackground";
+import { clerkAppearance } from "@/lib/clerkAppearance";
 
 interface SignInPageProps {
     searchParams: Promise<{ redirect_url?: string }>;
@@ -31,7 +32,11 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
                             </p>
                         </div>
 
-                        <SignIn fallbackRedirectUrl={target} signUpUrl={signUpHref} />
+                        <SignIn
+                            fallbackRedirectUrl={target}
+                            signUpUrl={signUpHref}
+                            appearance={clerkAppearance}
+                        />
                     </div>
                 </div>
             </main>

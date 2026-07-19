@@ -393,3 +393,24 @@ body {
   padding: 0.375rem 0.75rem;
   backdrop-filter: blur(12px);
 }
+
+/* Hide Clerk development badge */
+.cl-developmentBadge {
+  display: none !important;
+}
+
+/* Fix social button hover states */
+.cl-socialButtonsBlockButton:hover::after {
+  display: none !important;
+}
+
+/* Remove any pseudo-elements that might appear on hover */
+.cl-socialButtonsBlockButton {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.cl-socialButtonsBlockButton>* {
+  position: relative !important;
+  z-index: 2 !important;
+}

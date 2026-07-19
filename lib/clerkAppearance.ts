@@ -1,22 +1,23 @@
+// lib/clerkAppearance.ts
 export const clerkAppearance = {
     variables: {
-        colorPrimary: "#818cf8",           // brand-500 — primary buttons, links
+        colorPrimary: "#818cf8",
         colorPrimaryForeground: "#ffffff",
 
-        colorBackground: "#0e0d16",        // ink-900 — card/popover surface
-        colorForeground: "#e8e5f5",        // mist-300 — primary text
-        colorMutedForeground: "#7c7a92",   // mist-600 — secondary/subtitle text
+        colorBackground: "#0e0d16",
+        colorForeground: "#e8e5f5",
+        colorMutedForeground: "#7c7a92",
         colorMuted: "rgba(255,255,255,0.03)",
 
         colorInput: "rgba(255,255,255,0.04)",
-        colorInputForeground: "#f1f0f5",   // mist-200
+        colorInputForeground: "#f1f0f5",
 
-        colorDanger: "#fb7185",            // danger-400
-        colorSuccess: "#34d399",           // success-400
-        colorWarning: "#fbbf24",           // warning-400
+        colorDanger: "#fb7185",
+        colorSuccess: "#34d399",
+        colorWarning: "#fbbf24",
         colorNeutral: "#ffffff",
 
-        colorShimmer: "#a78bfa",           // brand-400
+        colorShimmer: "#a78bfa",
         colorBorder: "rgba(255,255,255,0.08)",
         colorRing: "#818cf8",
 
@@ -28,11 +29,31 @@ export const clerkAppearance = {
         cardBox: "!bg-transparent !shadow-none !border-none !w-full !max-w-full !overflow-hidden",
         card: "!bg-transparent !shadow-none !border-none !p-0 !w-full !max-w-full",
 
-
         formFieldInput: "!bg-white/4 !border-white/10 !text-mist-200 !w-full !max-w-full !box-border",
         formButtonPrimary:
             "!bg-linear-to-br !from-brand-600 !to-brand-500 hover:!opacity-90 transition-opacity normal-case text-[14px] font-semibold !w-full !max-w-full !box-border",
-        socialButtonsBlockButton: "!border-white/10 hover:!bg-white/5 !w-full !max-w-full !box-border",
+
+        // Fix social buttons - remove the dark overlay on hover
+        socialButtonsBlockButton: `
+            !border-white/10 
+            hover:!bg-white/5 
+            !w-full 
+            !max-w-full 
+            !box-border 
+            !relative 
+            !overflow-hidden
+            !transition-colors
+        `,
+        socialButtonsBlockButton__google: `
+            !border-white/10 
+            hover:!bg-white/5 
+            !w-full 
+            !max-w-full 
+            !box-border 
+            !relative 
+            !overflow-hidden
+            !transition-colors
+        `,
         socialButtons: "!w-full",
         formFieldRow: "!w-full !max-w-full",
         form: "!w-full !max-w-full",
@@ -48,5 +69,9 @@ export const clerkAppearance = {
         formFieldLabel: "!text-mist-500",
         identityPreviewText: "!text-mist-400",
         identityPreviewEditButton: "!text-brand-400",
+
+        // Hide development mode badge
+        developmentBadge: "!hidden",
+        developmentBadge__development: "!hidden",
     },
 };
