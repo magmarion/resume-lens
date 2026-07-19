@@ -20,8 +20,8 @@ export default async function SignUpPage({ searchParams }: SignUpPageProps) {
             <div aria-hidden="true" className="bg-vignette fixed inset-0 z-1 pointer-events-none" />
 
             <main className="relative z-10 flex min-h-screen items-center justify-center px-4 py-24">
-                <div className="anim-1 w-full max-w-sm">
-                    <div className="glass-card p-8">
+                <div className="anim-1 w-full max-w-md">
+                    <div className="glass-card overflow-hidden p-8">
                         <div className="mb-6 text-center">
                             <h1 className="text-gradient-brand text-2xl font-bold tracking-tight">
                                 Create your account
