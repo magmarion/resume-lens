@@ -119,12 +119,14 @@ export default function Navbar() {
                         </Link>
                     )}
                     {isLoaded && isSignedIn && <UserButton />}
-                    <AuthGateLink
-                        href="/upload"
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
-                    >
-                        Try free
-                    </AuthGateLink>
+                    {isLoaded && !isSignedIn && (
+                        <AuthGateLink
+                            href="/upload"
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                        >
+                            Try free
+                        </AuthGateLink>
+                    )}
                 </div>
 
                 {/* Mobile menu button */}
@@ -196,12 +198,14 @@ export default function Navbar() {
                         </div>
                     )}
 
-                    <AuthGateLink
-                        href="/upload"
-                        className="mt-1 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-3 py-2.5 text-center text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
-                    >
-                        Try free
-                    </AuthGateLink>
+                    {isLoaded && !isSignedIn && (
+                        <AuthGateLink
+                            href="/upload"
+                            className="mt-1 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-3 py-2.5 text-center text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                        >
+                            Try free
+                        </AuthGateLink>
+                    )}
                 </div>
             )}
         </nav>
