@@ -81,7 +81,7 @@ export default function Navbar() {
                     <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
                 </Link>
 
-                {/* Desktop links */}
+                {/* Desktop links - centered */}
                 <div className="hidden items-center gap-7 md:flex">
                     {NAV_LINKS.map((l) => (
                         <Link
@@ -108,8 +108,7 @@ export default function Navbar() {
                     )}
                 </div>
 
-                {/* Desktop right */}
-                <div className="hidden items-center gap-2.5 md:flex">
+                <div className="hidden items-center gap-2.5 md:flex md:min-w-26.25 md:justify-end">
                     {isLoaded && !isSignedIn && (
                         <Link
                             href="/sign-in"
@@ -129,7 +128,6 @@ export default function Navbar() {
                     )}
                 </div>
 
-                {/* Mobile menu button */}
                 <button
                     className="flex items-center justify-center rounded-lg p-2 text-mist-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60 md:hidden"
                     onClick={() => setMobileOpen((v) => !v)}
