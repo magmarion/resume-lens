@@ -41,10 +41,10 @@ export function ScoreRing() {
                 </defs>
             </svg>
             <div className="absolute text-center">
-                <div className="text-[20px] font-[750] text-[#e8e5f5] tracking-[-0.03em] leading-none">
+                <div className="text-[20px] font-[750] text-mist-300 tracking-[-0.03em] leading-none">
                     {score}
                 </div>
-                <div className="text-[9px] text-[#6d6b85] font-medium tracking-[0.04em] uppercase">
+                <div className="text-[9px] text-mist-700 font-medium tracking-[0.04em] uppercase">
                     Score
                 </div>
             </div>

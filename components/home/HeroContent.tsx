@@ -29,7 +29,7 @@ export function HeroContent() {
 
             <div className="anim-4 mb-10 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:mb-11">
                 <AuthGateLink href="/upload" className="btn-main justify-center sm:justify-start">
-                    Analyse my resume free
+                    Analyse my resume
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                         <path d="M3 7.5H12M12 7.5L8.5 4M12 7.5L8.5 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
