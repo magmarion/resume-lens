@@ -54,6 +54,7 @@ Resume Lens is built using modern web technologies to provide a fast, reliable, 
 * @react-pdf/renderer for PDF report generation
 * Clerk for authentication
 * MongoDB for analysis history storage
+* Vercel Analytics & Speed Insights for performance monitoring
 
 ---
 
