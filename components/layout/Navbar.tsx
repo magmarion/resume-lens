@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import AuthGateLink from "@/components/auth/AuthGateLink";
+import Image from "next/image";
 
 const NAV_LINKS = [
     { label: "Features", href: "/#features" },
@@ -72,16 +73,19 @@ export default function Navbar() {
             <div className="mx-auto flex w-full max-w-280 items-center justify-between px-6">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-brand-600 to-brand-400 shadow-[0_0_14px_rgba(99,73,228,0.45)]">
-                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                            <path d="M4.5 11L7.5 4L10.5 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M5.5 8.5H9.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
+                    <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg">
+                        <Image
+                            src="/logo.png"
+                            alt="Resume Lens Logo"
+                            width={40}
+                            height={40}
+                            className="object-contain"
+                            priority
+                        />
                     </div>
                     <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
                 </Link>
 
-                {/* Desktop links - centered */}
                 <div className="hidden items-center gap-7 md:flex">
                     {NAV_LINKS.map((l) => (
                         <Link
