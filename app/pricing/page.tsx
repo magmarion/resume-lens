@@ -85,8 +85,8 @@ export default function PricingPage() {
                         <div
                             key={plan.name}
                             className={`anim-${Math.min(i + 3, 6)} relative flex flex-col rounded-2xl border p-7 ${plan.highlighted
-                                    ? "border-brand-500/40 bg-brand-600/[0.07]"
-                                    : "border-white/8 bg-white/2"
+                                ? "border-brand-500/40 bg-brand-600/[0.07]"
+                                : "border-white/8 bg-white/2"
                                 }`}
                             style={
                                 plan.highlighted
@@ -134,8 +134,10 @@ export default function PricingPage() {
 
                             {plan.name === "Teams" ? (
                                 <Link
-                                    href="/contact"
+                                    href="#"
+                                    onClick={(e) => e.preventDefault()}
                                     className="btn-ghost w-full justify-center"
+                                    title="Coming soon"
                                 >
                                     {plan.cta}
                                 </Link>
