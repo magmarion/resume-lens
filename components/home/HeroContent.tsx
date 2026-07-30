@@ -23,7 +23,7 @@ export function HeroContent() {
             </h1>
 
             <p className="anim-3 mb-8 max-w-115 text-[clamp(14px,2vw,17.5px)] leading-[1.7] tracking-tight text-mist-600 sm:mb-9">
-                Upload your resume, paste a job description, and get an instant AI review —
+                Upload your resume, paste a job description, and get an instant AI review -
                 keyword gaps, ATS score, bullet rewrites, and actionable fixes in seconds.
             </p>
 
@@ -34,13 +34,6 @@ export function HeroContent() {
                         <path d="M3 7.5H12M12 7.5L8.5 4M12 7.5L8.5 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </AuthGateLink>
-                <Link href="#" className="btn-ghost justify-center sm:justify-start">
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                        <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" strokeWidth="1.2" />
-                        <path d="M6 5.5L10 7.5L6 9.5V5.5Z" fill="currentColor" />
-                    </svg>
-                    See it in action
-                </Link>
             </div>
 
             <div className="anim-5 flex flex-wrap justify-center gap-2.5 sm:justify-start">
