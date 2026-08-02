@@ -120,19 +120,30 @@ export default function Navbar() {
                     {isLoaded && !isSignedIn && (
                         <Link
                             href="/sign-in"
-                            className="rounded-md text-[13.5px] font-normal tracking-tight text-mist-600 transition-colors hover:text-mist-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                            className="rounded-lg border border-white/10 bg-white/3 px-3.5 py-2 text-[13px] font-medium tracking-tight text-mist-400 transition-all hover:border-white/20 hover:bg-white/6 hover:text-mist-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
                         >
                             Sign in
                         </Link>
                     )}
                     {isLoaded && isSignedIn && <UserButton />}
                     {isLoaded && !isSignedIn && (
-                        <AuthGateLink
-                            href="/upload"
-                            className="inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
-                        >
-                            Try free
-                        </AuthGateLink>
+                        <div className="relative">
+                            {/* Soft ambient glow behind the button — reuses the
+                                existing glowPulse keyframe already used for
+                                .glow-dot elsewhere, kept restrained (low opacity,
+                                slow) so it reads as "alive" without competing
+                                with nearby text. */}
+                            <div
+                                aria-hidden="true"
+                                className="glow-dot pointer-events-none absolute inset-0 -z-10 rounded-lg bg-brand-500 blur-lg opacity-40"
+                            />
+                            <AuthGateLink
+                                href="/upload"
+                                className="relative inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                            >
+                                Try free
+                            </AuthGateLink>
+                        </div>
                     )}
                 </div>
 
@@ -153,6 +164,7 @@ export default function Navbar() {
                 </button>
             </div>
 
+            {/* Mobile dropdown */}
             {mobileOpen && (
                 <div
                     id="mobile-nav-menu"
@@ -191,7 +203,7 @@ export default function Navbar() {
                         <Link
                             href="/sign-in"
                             onClick={() => setMobileOpen(false)}
-                            className="w-full rounded-lg px-3 py-2.5 text-left text-sm font-medium text-mist-500 transition-colors hover:bg-white/5 hover:text-mist-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                            className="w-full rounded-lg border border-white/10 bg-white/3 px-3 py-2.5 text-left text-sm font-medium text-mist-400 transition-all hover:border-white/20 hover:bg-white/6 hover:text-mist-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
                         >
                             Sign in
                         </Link>
