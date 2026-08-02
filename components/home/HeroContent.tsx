@@ -3,7 +3,6 @@
 import { StatPill } from "./StatPill";
 import { BADGE_TEXT } from "./hero.constants";
 import AuthGateLink from "@/components/auth/AuthGateLink";
-import Link from "next/link";
 
 export function HeroContent() {
     return (
@@ -27,13 +26,27 @@ export function HeroContent() {
                 keyword gaps, ATS score, bullet rewrites, and actionable fixes in seconds.
             </p>
 
-            <div className="anim-4 mb-10 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap sm:mb-11">
+            <div className="anim-4 mb-4 flex w-full flex-col gap-2.5 sm:w-auto sm:flex-row sm:flex-wrap">
                 <AuthGateLink href="/upload" className="btn-main justify-center sm:justify-start">
-                    Analyse my resume
+                    Analyse resume (Beta v1.0)
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
                         <path d="M3 7.5H12M12 7.5L8.5 4M12 7.5L8.5 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </AuthGateLink>
+            </div>
+            <div className="anim-4 mb-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 sm:justify-start sm:mb-11">
+                <span className="flex items-center gap-1.5 text-[12.5px] text-mist-700">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true" className="shrink-0 text-success-400">
+                        <path d="M2.5 6.5L5 9L10.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    No credit card required
+                </span>
+                <span className="flex items-center gap-1.5 text-[12.5px] text-mist-700">
+                    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true" className="shrink-0 text-success-400">
+                        <path d="M2.5 6.5L5 9L10.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    Results in under 10 seconds
+                </span>
             </div>
 
             <div className="anim-5 flex flex-wrap justify-center gap-2.5 sm:justify-start">
