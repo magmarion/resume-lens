@@ -82,7 +82,12 @@ export default function Navbar() {
                             priority
                         />
                     </div>
-                    <span className="text-[15px] font-semibold tracking-tight text-mist-200">Resume Lens</span>
+                    <span
+                        className="text-gradient-brand text-[17px] font-semibold tracking-tight"
+                        style={{ fontFamily: "var(--font-display)" }}
+                    >
+                        Resume Lens
+                    </span>
                 </Link>
 
                 <div className="hidden items-center gap-7 md:flex">
@@ -148,7 +153,6 @@ export default function Navbar() {
                 </button>
             </div>
 
-            {/* Mobile dropdown */}
             {mobileOpen && (
                 <div
                     id="mobile-nav-menu"
