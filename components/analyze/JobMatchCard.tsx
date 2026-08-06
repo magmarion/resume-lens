@@ -2,7 +2,7 @@ import type { JdMatch } from "@/types/analysis";
 
 function matchVariant(score: number) {
     if (score >= 80) return { color: "#34d399", bg: "bg-success-400/10", border: "border-success-400/25", label: "Strong match" };
-    if (score >= 60) return { color: "#a78bfa", bg: "bg-brand-600/10", border: "border-brand-600/25", label: "Good match" };
+    if (score >= 60) return { color: "#4a9e8f", bg: "bg-emerald-500/10", border: "border-emerald-500/25", label: "Good match" };
     if (score >= 40) return { color: "#fbbf24", bg: "bg-warning-400/10", border: "border-warning-400/25", label: "Partial match" };
     return { color: "#fb7185", bg: "bg-danger-400/10", border: "border-danger-400/25", label: "Weak match" };
 }
@@ -13,7 +13,6 @@ export default function JobMatchCard({ jdMatch }: { jdMatch: JdMatch }) {
 
     return (
         <div className="glass-card overflow-hidden">
-            {/* Header with score bar */}
             <div className={`border-b border-white/6 px-4 py-4 sm:px-5 ${v.bg}`}>
                 <div className="mb-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -47,7 +46,6 @@ export default function JobMatchCard({ jdMatch }: { jdMatch: JdMatch }) {
                 </div>
             </div>
 
-            {/* Keywords */}
             <div className="grid grid-cols-1 gap-px bg-white/4 sm:grid-cols-2">
                 <div className="bg-ink-950 px-4 py-3.5 sm:px-5">
                     <div className="mb-2.5 flex items-center gap-1.5">
@@ -90,8 +88,8 @@ export default function JobMatchCard({ jdMatch }: { jdMatch: JdMatch }) {
                 </div>
             </div>
 
-            <div className="border-t border-white/5 bg-brand-600/6 px-4 py-3.5 sm:px-5">
-                <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-brand-400">Recommendation</div>
+            <div className="border-t border-white/5 bg-emerald-600/6 px-4 py-3.5 sm:px-5">
+                <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-400">Recommendation</div>
                 <p className="m-0 text-[13px] leading-relaxed text-mist-400">{recommendation}</p>
             </div>
         </div>
