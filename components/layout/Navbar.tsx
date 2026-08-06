@@ -128,18 +128,13 @@ export default function Navbar() {
                     {isLoaded && isSignedIn && <UserButton />}
                     {isLoaded && !isSignedIn && (
                         <div className="relative">
-                            {/* Soft ambient glow behind the button — reuses the
-                                existing glowPulse keyframe already used for
-                                .glow-dot elsewhere, kept restrained (low opacity,
-                                slow) so it reads as "alive" without competing
-                                with nearby text. */}
                             <div
                                 aria-hidden="true"
                                 className="glow-dot pointer-events-none absolute inset-0 -z-10 rounded-lg bg-brand-500 blur-lg opacity-40"
                             />
                             <AuthGateLink
                                 href="/upload"
-                                className="relative inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white shadow-[0_0_0_1px_rgba(99,73,228,0.4),0_4px_16px_rgba(99,73,228,0.3)] transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
+                                className="relative inline-flex items-center gap-1.5 rounded-lg bg-linear-to-br from-brand-600 to-brand-500 px-4 py-2 text-[13px] font-semibold tracking-tight text-white transition-all hover:-translate-y-px hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60"
                             >
                                 Try free
                             </AuthGateLink>

@@ -502,22 +502,17 @@ main,
 }
 
 a {
-  color: #4a9e8f;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-a:hover {
+/* a:hover {
   color: #6bb5a8;
-}
+} */
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', 'Inter', system-ui, sans-serif;
   letter-spacing: -0.02em;
-}
-
-.emerald-accent {
-  color: #4a9e8f;
 }
 
 .border-emerald {
