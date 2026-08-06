@@ -74,7 +74,7 @@ export default function Navbar() {
                 <Link href="/" className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400/60">
                     <div className="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg">
                         <Image
-                            src="/logo.png"
+                            src="/app_logo.png"
                             alt="Resume Lens Logo"
                             width={40}
                             height={40}
