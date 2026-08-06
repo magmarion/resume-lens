@@ -5,7 +5,7 @@ interface ScoreGaugeProps {
 
 function scoreColor(score: number): { stroke: string; glow: string; label: string } {
     if (score >= 80) return { stroke: "#34d399", glow: "rgba(52,211,153,0.4)", label: "Excellent" };
-    if (score >= 60) return { stroke: "#a78bfa", glow: "rgba(167,139,250,0.4)", label: "Good" };
+    if (score >= 60) return { stroke: "#4a9e8f", glow: "rgba(74,158,143,0.4)", label: "Good" };
     if (score >= 40) return { stroke: "#fbbf24", glow: "rgba(251,191,36,0.4)", label: "Average" };
     return { stroke: "#fb7185", glow: "rgba(251,113,133,0.4)", label: "Needs work" };
 }
@@ -63,8 +63,8 @@ export default function ScoreGauge({ score, atsSafe }: ScoreGaugeProps) {
 
             <div
                 className={`inline-flex items-center gap-1.5 px-3 py-1.25 rounded-full border ${atsSafe
-                        ? "bg-emerald-400/10 border-emerald-400/25"
-                        : "bg-rose-400/10 border-rose-400/25"
+                    ? "bg-emerald-400/10 border-emerald-400/25"
+                    : "bg-rose-400/10 border-rose-400/25"
                     }`}
             >
                 {atsSafe ? (
