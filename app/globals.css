@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -49,41 +49,29 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ── Sapphire & Champagne — premium palette ──────────────────────────────
-   Replaces the previous violet/indigo identity. Token NAMES are unchanged
-   (ink-/mist-/brand-/success-/warning-/danger-), only their values shift —
-   meaning every component using bg-brand-600, text-brand-400, etc. picks
-   up the new color automatically with zero component edits needed.
-
-   brand-*   → deep sapphire blue (primary actions, links, focus rings)
-   warning-* → kept as amber/gold — now doubles as an intentional premium
-               accent for standout moments (top scores, premium badges),
-               not just a semantic "warning" color.
-   ink-/mist-* → shifted from purple-black to a cooler blue-black undertone
-               to match the new brand hue. */
 @theme {
-  --color-ink-950: #070b14;
-  --color-ink-900: #0e1420;
-  --color-ink-800: #182236;
+  --color-ink-950: #08090a;
+  --color-ink-900: #0f1214;
+  --color-ink-800: #1a1f22;
+  
+  --color-mist-950: #2a3238;
+  --color-mist-900: #3d474f;
+  --color-mist-800: #55626b;
+  --color-mist-700: #73818a;
+  --color-mist-600: #94a2ab;
+  --color-mist-500: #b8c4cc;
+  --color-mist-400: #d4dee4;
+  --color-mist-300: #e8eef2;
+  --color-mist-200: #f4f8fa;
 
-  --color-mist-950: #2a3548;
-  --color-mist-900: #3a4658;
-  --color-mist-800: #4f5c71;
-  --color-mist-700: #6b7789;
-  --color-mist-600: #8994a3;
-  --color-mist-500: #adb6c2;
-  --color-mist-400: #cbd1db;
-  --color-mist-300: #e5e8ee;
-  --color-mist-200: #f3f4f7;
+  --color-brand-400: #6bb5a8;
+  --color-brand-500: #4a9e8f;
+  --color-brand-600: #2d7d6e;
+  --color-brand-700: #1a5c50;
 
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-
-  --color-success-400: #34d399;
-  --color-warning-400: #fbbf24;
-  --color-danger-400: #fb7185;
+  --color-warning-400: #d4c49a;
+  --color-success-400: #5ba88f;
+  --color-danger-400: #d47a7a;
 }
 
 :root {
@@ -122,37 +110,37 @@
 }
 
 .dark {
-  --background: oklch(0.08 0.005 250);
-  --foreground: oklch(0.96 0.01 250);
-  --card: oklch(0.12 0.008 250);
-  --card-foreground: oklch(0.96 0.01 250);
-  --popover: oklch(0.12 0.008 250);
-  --popover-foreground: oklch(0.96 0.01 250);
-  --primary: oklch(0.68 0.16 255);
+  --background: oklch(0.05 0.01 180);
+  --foreground: oklch(0.96 0.01 180);
+  --card: oklch(0.08 0.015 180);
+  --card-foreground: oklch(0.96 0.01 180);
+  --popover: oklch(0.08 0.015 180);
+  --popover-foreground: oklch(0.96 0.01 180);
+  --primary: oklch(0.55 0.12 170);
   --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.18 0.01 250);
-  --secondary-foreground: oklch(0.96 0.01 250);
-  --muted: oklch(0.16 0.01 250);
-  --muted-foreground: oklch(0.6 0.02 250);
-  --accent: oklch(0.18 0.02 250);
-  --accent-foreground: oklch(0.96 0.01 250);
+  --secondary: oklch(0.12 0.015 180);
+  --secondary-foreground: oklch(0.96 0.01 180);
+  --muted: oklch(0.1 0.015 180);
+  --muted-foreground: oklch(0.55 0.03 180);
+  --accent: oklch(0.14 0.02 180);
+  --accent-foreground: oklch(0.96 0.01 180);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.6 0.14 255);
+  --border: oklch(1 0 0 / 6%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.45 0.12 170);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.12 0.008 250);
-  --sidebar-foreground: oklch(0.96 0.01 250);
-  --sidebar-primary: oklch(0.68 0.16 255);
+  --sidebar: oklch(0.08 0.015 180);
+  --sidebar-foreground: oklch(0.96 0.01 180);
+  --sidebar-primary: oklch(0.55 0.12 170);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.18 0.02 250);
-  --sidebar-accent-foreground: oklch(0.96 0.01 250);
-  --sidebar-border: oklch(1 0 0 / 8%);
-  --sidebar-ring: oklch(0.6 0.14 255);
+  --sidebar-accent: oklch(0.14 0.02 180);
+  --sidebar-accent-foreground: oklch(0.96 0.01 180);
+  --sidebar-border: oklch(1 0 0 / 6%);
+  --sidebar-ring: oklch(0.45 0.12 170);
 }
 
 @layer base {
@@ -189,18 +177,16 @@ html {
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.3);
+  background: rgba(45, 125, 110, 0.3);
   color: #f3f4f7;
 }
 
-
-/* 4. BACKGROUND (Aurora) — rgba values shifted from violet to sapphire */
 body {
   background:
-    radial-gradient(ellipse at 10% 80%, rgba(29, 78, 216, 0.12) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 45%),
-    radial-gradient(ellipse at 50% 50%, rgba(96, 165, 250, 0.05) 0%, transparent 60%),
-    #070b14 !important;
+    radial-gradient(ellipse at 10% 80%, rgba(26, 92, 80, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 20%, rgba(45, 125, 110, 0.1) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(74, 158, 143, 0.05) 0%, transparent 60%),
+    #08090a !important;
   background-attachment: fixed;
   position: relative;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -215,9 +201,9 @@ body::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(ellipse at 70% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 30% 70%, rgba(96, 165, 250, 0.03) 0%, transparent 50%);
-  animation: auroraDrift 12s ease-in-out infinite alternate;
+    radial-gradient(ellipse at 70% 30%, rgba(45, 125, 110, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 70%, rgba(74, 158, 143, 0.03) 0%, transparent 50%);
+  animation: auroraDrift 15s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
 }
@@ -375,9 +361,9 @@ main,
   white-space: nowrap;
   cursor: pointer;
   border: none;
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 40%, #3b82f6 70%, #60a5fa 100%);
+  background: linear-gradient(135deg, #1a5c50 0%, #2d7d6e 40%, #4a9e8f 70%, #6bb5a8 100%);
   color: #fff;
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3), 0 8px 32px rgba(37, 99, 235, 0.35),
+  box-shadow: 0 0 0 1px rgba(45, 125, 110, 0.3), 0 8px 32px rgba(45, 125, 110, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -385,7 +371,7 @@ main,
 .btn-main:hover {
   opacity: 0.92;
   transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4), 0 16px 48px rgba(37, 99, 235, 0.45),
+  box-shadow: 0 0 0 1px rgba(45, 125, 110, 0.4), 0 16px 48px rgba(45, 125, 110, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
@@ -413,7 +399,7 @@ main,
   cursor: pointer;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #cbd1db;
+  color: #d4dee4;
   backdrop-filter: blur(8px);
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -468,27 +454,24 @@ main,
 }
 
 .text-gradient-brand {
-  background: linear-gradient(155deg, #ffffff 0%, #ffffff 50%, rgba(96, 165, 250, 0.7) 100%);
+  background: linear-gradient(155deg, #ffffff 0%, #ffffff 50%, rgba(74, 158, 143, 0.6) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* NOTE: class name kept as "text-gradient-violet" so no component needs
-   renaming, but the actual gradient now renders sapphire blue. */
 .text-gradient-violet {
-  background: linear-gradient(90deg, #60a5fa, #3b82f6, #1d4ed8);
+  background: linear-gradient(90deg, #6bb5a8, #4a9e8f, #2d7d6e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .bg-vignette {
-  background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(10, 16, 28, 0) 0%, #070b14 72%);
+  background: radial-gradient(ellipse 80% 55% at 50% 0%, rgba(8, 9, 10, 0) 0%, #08090a 72%);
   pointer-events: none;
 }
 
-/* (Clerk) */
 .cl-developmentBadge {
   display: none !important;
 }
@@ -505,4 +488,42 @@ main,
 .cl-socialButtonsBlockButton>* {
   position: relative !important;
   z-index: 2 !important;
+}
+
+
+::selection {
+  background: rgba(45, 125, 110, 0.3);
+  color: #f3f4f7;
+}
+
+*:focus-visible {
+  outline: 2px solid #4a9e8f;
+  outline-offset: 2px;
+}
+
+a {
+  color: #4a9e8f;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #6bb5a8;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.emerald-accent {
+  color: #4a9e8f;
+}
+
+.border-emerald {
+  border-color: rgba(45, 125, 110, 0.3);
+}
+
+.glow-emerald {
+  box-shadow: 0 0 40px rgba(45, 125, 110, 0.1);
 }
