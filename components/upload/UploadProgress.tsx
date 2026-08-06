@@ -54,7 +54,7 @@ function SpinnerIcon() {
             />
             <path
                 d="M6 1.5A4.5 4.5 0 0 1 10.5 6"
-                stroke="#a78bfa"
+                stroke="#4a9e8f"
                 strokeWidth="1.5"
                 strokeLinecap="round"
             />
@@ -65,35 +65,30 @@ function SpinnerIcon() {
 export default function UploadProgress({ stage, fileName, errorMessage }: UploadProgressProps) {
     const stageIndex = STAGES.findIndex((s) => s.id === stage);
 
-    // Helper to get border color for stage items
     const getStageBorder = (isActive: boolean, isDone: boolean) => {
-        if (isActive) return "border-violet-600/25";
+        if (isActive) return "border-emerald-600/25";
         if (isDone) return "border-emerald-400/15";
         return "border-white/5";
     };
 
-    // Helper to get background color for stage items
     const getStageBackground = (isActive: boolean, isDone: boolean) => {
-        if (isActive) return "bg-violet-600/12";
+        if (isActive) return "bg-emerald-600/12";
         if (isDone) return "bg-emerald-400/6";
         return "bg-white/2";
     };
 
-    // Helper to get icon container border color
     const getIconBorder = (isActive: boolean, isDone: boolean) => {
-        if (isActive) return "border-violet-400/30";
+        if (isActive) return "border-emerald-400/30";
         if (isDone) return "border-emerald-400/30";
         return "border-white/8";
     };
 
-    // Helper to get icon container background
     const getIconBackground = (isActive: boolean, isDone: boolean) => {
-        if (isActive) return "bg-violet-600/20";
+        if (isActive) return "bg-emerald-600/20";
         if (isDone) return "bg-emerald-400/15";
         return "bg-white/4";
     };
 
-    // Helper to get text color for stage label
     const getLabelColor = (isActive: boolean, isDone: boolean) => {
         if (isDone) return "text-emerald-300";
         if (isActive) return "text-[#e8e5f5]";
@@ -102,9 +97,7 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
 
     return (
         <div className="w-full flex flex-col items-center gap-8 py-2">
-            {/* File name pill */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-600/10 border border-violet-600/22 max-w-full">
-                {/* PDF icon */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-600/10 border border-emerald-600/22 max-w-full">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                     <rect
                         x="2"
@@ -112,12 +105,12 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
                         width="8"
                         height="12"
                         rx="1.5"
-                        stroke="#a78bfa"
+                        stroke="#4a9e8f"
                         strokeWidth="1.2"
                     />
                     <path
                         d="M9 1L12 4"
-                        stroke="#a78bfa"
+                        stroke="#4a9e8f"
                         strokeWidth="1.2"
                         strokeLinecap="round"
                     />
@@ -127,24 +120,23 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
                         width="3"
                         height="3"
                         rx="0.5"
-                        fill="#a78bfa"
+                        fill="#4a9e8f"
                         fillOpacity="0.2"
-                        stroke="#a78bfa"
+                        stroke="#4a9e8f"
                         strokeWidth="1.2"
                     />
                     <path
                         d="M4.5 6.5H9.5M4.5 9H7.5"
-                        stroke="#a78bfa"
+                        stroke="#4a9e8f"
                         strokeWidth="1"
                         strokeLinecap="round"
                     />
                 </svg>
-                <span className="text-[12px] font-medium text-[#c4b5fd] truncate max-w-65">
+                <span className="text-[12px] font-medium text-emerald-300 truncate max-w-65">
                     {fileName}
                 </span>
             </div>
 
-            {/* Stage list */}
             <div className="flex flex-col gap-1 w-full max-w-85">
                 {STAGES.map((s, i) => {
                     const isDone = stageIndex > i;
@@ -158,7 +150,6 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
                                 } border ${getStageBorder(isActive, isDone)} ${isPending ? "opacity-40" : "opacity-100"
                                 }`}
                         >
-                            {/* Status icon */}
                             <div
                                 className={`w-6 h-6 rounded-full shrink-0 flex items-center justify-center border ${getIconBorder(
                                     isActive,
@@ -192,7 +183,6 @@ export default function UploadProgress({ stage, fileName, errorMessage }: Upload
                 })}
             </div>
 
-            {/* Error state */}
             {stage === "error" && errorMessage && (
                 <div className="w-full max-w-85 p-3 px-4 rounded-[10px] bg-rose-400/8 border border-rose-400/20">
                     <div className="text-[12px] font-semibold text-rose-400 mb-1">

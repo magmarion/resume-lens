@@ -17,7 +17,7 @@ function UploadIcon({ dragging }: { dragging: boolean }) {
     return (
         <div
             className={`w-16 h-16 rounded-[18px] flex items-center justify-center mb-5 transition-all duration-250 border ${dragging
-                ? "bg-violet-600/20 border-violet-400/40"
+                ? "bg-emerald-600/20 border-emerald-400/40"
                 : "bg-white/4 border-white/8"
                 }`}
         >
@@ -32,14 +32,14 @@ function UploadIcon({ dragging }: { dragging: boolean }) {
             >
                 <path
                     d="M14 18V10M14 10L10.5 13.5M14 10L17.5 13.5"
-                    stroke={dragging ? "#a78bfa" : "#52506a"}
+                    stroke={dragging ? "#4a9e8f" : "#52506a"}
                     strokeWidth="1.6"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                 />
                 <path
                     d="M6 20C4.343 20 3 18.657 3 17C3 15.477 4.117 14.213 5.584 14.026C5.535 13.693 5.5 13.351 5.5 13C5.5 9.686 8.186 7 11.5 7C13.431 7 15.148 7.908 16.268 9.322C16.671 9.112 17.123 9 17.6 9C19.478 9 21 10.522 21 12.4C21 12.598 20.983 12.792 20.951 12.981C22.66 13.301 24 14.8 24 16.6C24 18.578 22.378 20 20.5 20H6Z"
-                    stroke={dragging ? "#a78bfa" : "#52506a"}
+                    stroke={dragging ? "#4a9e8f" : "#52506a"}
                     strokeWidth="1.6"
                     strokeLinejoin="round"
                 />
@@ -118,7 +118,6 @@ export default function UploadBox() {
         setStage("parsing");
         await new Promise(r => setTimeout(r, 700));
 
-        // Store the extracted text + metadata for the results page
         sessionStorage.setItem(
             "resumeData",
             JSON.stringify({
@@ -130,8 +129,6 @@ export default function UploadBox() {
             })
         );
 
-        // Also store the raw file as a base64 data URL so /results
-        // can render the actual PDF visually
         const reader = new FileReader();
         reader.onload = () => {
             sessionStorage.setItem("resumePdfDataUrl", reader.result as string);
@@ -167,26 +164,23 @@ export default function UploadBox() {
 
     const isProcessing = stage !== "idle" && stage !== "error";
 
-    // Determine border color based on state
     const getBorderColor = () => {
-        if (dragging) return "border-violet-400/60";
+        if (dragging) return "border-emerald-400/60";
         if (stage === "error") return "border-rose-400/35";
-        if (isProcessing) return "border-violet-600/35";
+        if (isProcessing) return "border-emerald-600/35";
         return "border-white/9";
     };
 
-    // Determine background color based on state
     const getBackgroundColor = () => {
-        if (dragging) return "bg-violet-600/7";
+        if (dragging) return "bg-emerald-600/7";
         if (stage === "error") return "bg-rose-400/3";
-        if (isProcessing) return "bg-violet-600/4";
+        if (isProcessing) return "bg-emerald-600/4";
         return "bg-white/3";
     };
 
-    // Determine shadow based on state
     const getShadow = () => {
         if (dragging) {
-            return "shadow-[0_0_0_4px_rgba(99,73,228,0.10),0_20px_60px_rgba(0,0,0,0.5)]";
+            return "shadow-[0_0_0_4px_rgba(45,125,110,0.10),0_20px_60px_rgba(0,0,0,0.5)]";
         }
         return "shadow-[0_20px_60px_rgba(0,0,0,0.4)]";
     };
@@ -211,7 +205,6 @@ export default function UploadBox() {
                 aria-label="Upload PDF resume"
             />
 
-            {/* ── Idle state ── */}
             {stage === "idle" && (
                 <>
                     <UploadIcon dragging={dragging} />
@@ -237,7 +230,6 @@ export default function UploadBox() {
                 </>
             )}
 
-            {/* ── Processing / error state ── */}
             {stage !== "idle" && (
                 <div className="w-full">
                     <UploadProgress
@@ -246,7 +238,6 @@ export default function UploadBox() {
                         errorMessage={errorMessage}
                     />
 
-                    {/* Try again button on error */}
                     {stage === "error" && (
                         <div className="flex justify-center mt-5">
                             <button
